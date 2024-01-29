@@ -1,0 +1,59 @@
+/* header.css */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  position: relative;
+  background-color: #2d3748;
+  height: 80px;
+  margin: 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 75px;
+  padding: 0 1rem;
+  width: 100%;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* header.css */
+.navbar .action-btn {
+  padding: 9.5px 16px;
+  margin-left: 5px;
+  margin-right: 5px; /* Thêm margin phải ở đây */
+  border-radius: 8px;
+}
+
+.btn {
+  min-width: 98px;
+  padding: 14.5px 16px;
+  background: rgb(240, 113, 54);
+  border-radius: 12px;
+  display: inline-block;
+  font-weight: 500;
+  font-size: 1.4rem;
+  line-height: 21px;
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.navbar img {
+  width: 5em; /* Kích thước chiều rộng mong muốn */
+  height: auto;
+  margin-right: 10px; /* Chiều cao tự động theo tỷ lệ */
+}
+.language-container {
+  /* your styles here */
+}
