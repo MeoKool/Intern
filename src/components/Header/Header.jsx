@@ -8,7 +8,7 @@ export default function Header() {
       <div className="content">
         <div className="navbar">
           <div className="actions">
-            <a href="#!" className="btn action-btn">
+            <a href="/login-register" className="btn action-btn">
               Sign In
             </a>
             <div className="language-container">
