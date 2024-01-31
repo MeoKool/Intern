@@ -8,7 +8,7 @@ export default function Header() {
     <header className="header">
       <div className="content">
         <div className="navbar">
-          <img src={FPTlogo} alt="FPT Software" />
+          <img src={FPTlogo} alt="" />
           <div className="actions">
             <a href="#!" className="btn action-btn">
               Sign In
