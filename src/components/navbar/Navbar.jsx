@@ -198,7 +198,7 @@ export default function Navbar() {
           <>
             {menu.submenu == null || menu.submenu.length == 0 ? (
               <Link
-                to={menu.id}
+                to={`/${menu.id}`}
                 style={{ textDecoration: "none", color: "#000" }}
               >
                 <MenuButton menu={menu}></MenuButton>
@@ -214,7 +214,7 @@ export default function Navbar() {
                     menu.submenu.length > 0 &&
                     menu.submenu.map((submenu) => (
                       <Link
-                        to={submenu.id}
+                        to={`/${submenu.id}`}
                         style={{ textDecoration: "none", color: "#000" }}
                       >
                         <ListItemButton className="navbar--menu-sub-btn">

@@ -1,0 +1,33 @@
+* {
+  font-family: "Inter";
+}
+
+.import-setting {
+  display: flex;
+  margin-top: 1rem;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #eee;
+}
+
+.duplicate-control {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.option {
+  width: 150px;
+}
+
+.setting-title {
+  width: 200px;
+}
+
+.setting-content {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  width: 200px;
+}

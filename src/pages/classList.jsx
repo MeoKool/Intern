@@ -1,18 +1,16 @@
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
-import StudentList from "../components/studentList/StudentList";
+import ClassList from "../components/ClassList/ClassList";
 import Navbar from "../components/navbar/Navbar";
 import ContentContainer from "../components/ContentContainer/ContentContainer";
-import StudentListInClassHeader from "../components/ClassList/StudentListInClassHeader";
 
-export default function studentList() {
+export default function classList() {
   return (
     <>
       <Header />
       <Navbar />
       <ContentContainer>
-        <StudentListInClassHeader />
-        <StudentList />
+        <ClassList />
       </ContentContainer>
       <Footer />
     </>

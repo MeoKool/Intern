@@ -1,25 +1,41 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TablePagination from "@mui/material/TablePagination";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import DownloadIcon from "@mui/icons-material/Download";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { TextField, InputAdornment, Select, Popover, Box, Paper, Button, Menu } from "@mui/material";
+import * as XLSX from "xlsx";
+import {
+    Box,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TablePagination,
+    TextField,
+    InputAdornment,
+    Select,
+    Popover,
+    Button,
+    Menu,
+    MenuItem,
+    Checkbox,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import SettingsIcon from "@mui/icons-material/Settings";
-import MenuItem from "@mui/material/MenuItem";
-import Checkbox from "@mui/material/Checkbox";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import DownloadIcon from "@mui/icons-material/Download";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
-import * as XLSX from "xlsx";
+import AddUser from "./AddUser";
+import { Link } from "react-router-dom";
 
 const StudentList = () => {
     const [users, setUsers] = useState([]);
@@ -30,7 +46,15 @@ const StudentList = () => {
     const [searchTerm, setSearchTerm] = React.useState("");
     const [checked, setChecked] = useState({});
     const [selectedOption, setSelectedOption] = useState("fullName");
+    const [deleteConfirmation, setDeleteConfirmation] = useState(null);
+    const [showForm, setShowForm] = useState(false);
+    const handleButtonClick = () => {
+        setShowForm(true);
+    };
 
+    const handleFormClose = () => {
+        setShowForm(false);
+    };
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -43,6 +67,7 @@ const StudentList = () => {
     const handleCheck = (event) => {
         setChecked({ ...checked, [event.target.name]: event.target.checked });
     };
+
     const handleMenuClick = (event) => {
         setMoreHorizAnchorEl(event.currentTarget);
     };
@@ -50,6 +75,7 @@ const StudentList = () => {
     const handleMenuClose = () => {
         setMoreHorizAnchorEl(null);
     };
+
     useEffect(() => {
         fetchUsers();
     }, []);
@@ -69,6 +95,24 @@ const StudentList = () => {
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const openDeleteConfirmation = (userId) => {
+        setDeleteConfirmation(userId);
+    };
+
+    const closeDeleteConfirmation = () => {
+        setDeleteConfirmation(null);
+    };
+
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`https://6535e093c620ba9358ecba91.mockapi.io/student/${deleteConfirmation}`);
+            closeDeleteConfirmation();
+            fetchUsers();
+        } catch (error) {
+            console.error("Error deleting user:", error);
+        }
     };
 
     const exportToExcel = () => {
@@ -207,10 +251,12 @@ const StudentList = () => {
                                         padding: "10px",
                                         marginTop: "10px",
                                     }}
+                                    onClick={handleButtonClick}
                                 >
                                     <AddCircleOutlineIcon style={{ marginRight: "10px" }} />
                                     Add new
                                 </Button>
+                                {showForm && <AddUser onFormClose={handleFormClose} />}
                                 <Button
                                     variant="contained"
                                     style={{
@@ -341,11 +387,13 @@ const StudentList = () => {
                                                         <EditIcon style={{ marginRight: "8px" }} />
                                                         Edit Student
                                                     </MenuItem>
-                                                    <MenuItem>
-                                                        <ImportContactsIcon style={{ marginRight: "8px" }} />
-                                                        Score Management
+                                                    <MenuItem component={Link} to="/score-management">
+                                                         <ImportContactsIcon
+                                                             style={{ marginRight: "8px" }}
+                                                 />
+                                                                Score Management
                                                     </MenuItem>
-                                                    <MenuItem>
+                                                    <MenuItem onClick={() => openDeleteConfirmation(user.id)}>
                                                         <DeleteForeverIcon style={{ marginRight: "8px" }} />
                                                         Delete Student
                                                     </MenuItem>
@@ -368,6 +416,20 @@ const StudentList = () => {
                     </div>
                 </Box>
             </Box>
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog open={Boolean(deleteConfirmation)} onClose={closeDeleteConfirmation}>
+                <DialogTitle>Delete Confirmation</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Are you sure you want to delete this student?</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDeleteConfirmation}>Cancel</Button>
+                    <Button onClick={handleDelete} color="error">
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };

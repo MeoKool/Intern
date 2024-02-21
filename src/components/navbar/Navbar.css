@@ -1,4 +1,5 @@
 .navbar--box {
+  z-index: 3;
   margin-top: 80px;
   width: 100%;
   max-width: 256px;
