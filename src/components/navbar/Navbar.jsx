@@ -8,7 +8,7 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
-import "./Navbar.css";
+import "./Navbar.scss";
 import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -184,7 +184,13 @@ export default function Navbar() {
   };
 
   return (
-    <Box className={`navbar--box ${!toggle ? "navbar--box-hidden" : ""}`}>
+    <Box
+      sx={{
+        overflow: "auto",
+      }}
+      id="navbar"
+      className={`navbar--box ${!toggle ? "navbar--box-hidden" : ""}`}
+    >
       <List component="nav" aria-label="main mailbox folders">
         <ListItemButton
           className="navbar--menu-close"

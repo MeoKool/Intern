@@ -1,0 +1,37 @@
+.navbar {
+  &--box {
+    z-index: 3;
+    width: 100%;
+    margin-top: 80px;
+    max-width: 256px;
+    background-color: #edf2f7;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    transition: max-width 0.1s ease;
+    white-space: nowrap;
+  }
+
+  &--box-hidden {
+    max-width: 50px;
+  }
+
+  &--menu-close {
+    margin-bottom: 5px !important;
+  }
+
+  &--menu-btn {
+    height: 50px;
+  }
+
+  &--menu-icon {
+    min-width: 40px !important;
+  }
+
+  &--menu-sub-btn {
+    background-color: #ecf8ff !important;
+    margin: 10px 15px !important;
+    padding: 4px 0 !important;
+    padding-left: 45px !important;
+  }
+}

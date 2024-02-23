@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+@import '/src/sass/common.scss';
+
+.student-detail-edit {
+
+    &--box {
+        padding: 30px 3vw;
+    }
+
+    &--label {
+        background-color: $color-primary;
+        color: #FFFFFF;
+        font-weight: 600;
+        width: 100%;
+        padding: 10px 15px;
+        font-family: Arial, sans-serif;
+    }
+
+    &--info-field {
+        display: grid;
+        grid-template-columns: 0.45fr 0.55fr;
+        margin-bottom: 20px;
+        align-items: center;
+
+        > * {
+            font-family: Arial, sans-serif;
+        }
+    }
+
+    &--info-label {
+        font-weight: 600 !important;
+    }
+
+    &--class-container {
+        font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        align-items: center;
+        padding: 30px 2vw;
+        overflow-x: scroll;
+        color: $color-primary;
+    }
+
+    &--class-card {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        min-width: 450px;
+        padding: 20px 40px;
+        margin-right: 35px;
+        border-radius: 9px;
+    }
+
+    &--class-card-status {
+        color: #FFF;
+        font-weight: 600;
+        padding: 6px 15px;
+        border-radius: 15px; 
+        margin-left: 16px;
+    }
+
+    &--btn-reserve {
+        @extend .btn-primary;
+        margin: 25px 0 !important;
+    }
+
+    &--btn-action {
+        margin: 25px 0;
+        display: flex;
+        gap: 10px;
+        justify-content: end;
+
+        &-cancel {
+            color: #FF0000 !important;
+            text-decoration: underline !important;
+            text-transform: none !important;
+            font-size: 16px !important;
+        }
+
+        &-save {
+            @extend .btn-primary;
+            font-size: 16px !important;
+        }
+    }
+}

@@ -5,6 +5,8 @@ import {
   Box,
   Button,
   InputAdornment,
+  Menu,
+  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -25,6 +27,8 @@ const ClassList = () => {
   const [rowOfPage, setRowOfPage] = useState();
   const [page, setPage] = React.useState(0);
   const [searchItem, setSearchItem] = React.useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [moreHorizAnchorEl, setMoreHorizAnchorEl] = useState(null);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -49,7 +53,13 @@ const ClassList = () => {
   };
 
   // const SliceUser = filtered.slice(page * rowOfPage, (page + 1) * rowOfPage);
+  const handleMenuClick = (event) => {
+    setMoreHorizAnchorEl(event.currentTarget);
+  };
 
+  const handleMenuClose = () => {
+    setMoreHorizAnchorEl(null);
+  };
   return (
     <>
       <h1
@@ -199,12 +209,7 @@ const ClassList = () => {
                   {users.map((user) => (
                     <TableRow key={user.id}>
                       <TableCell style={{ fontSize: "15px" }} align="center">
-                        <Link
-                          to={`/student-list/${user.id}`}
-                          style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                          {user.class}
-                        </Link>
+                        {user.class}
                       </TableCell>
                       <TableCell style={{ fontSize: "15px" }} align="center">
                         {user.class_code}
@@ -228,7 +233,23 @@ const ClassList = () => {
                         {user.fsu}
                       </TableCell>
                       <TableCell align="center">
-                        <MoreHorizIcon />
+                        <MoreHorizIcon onClick={handleMenuClick} />
+                        <Menu
+                          anchorEl={moreHorizAnchorEl}
+                          open={Boolean(moreHorizAnchorEl)}
+                          onClose={handleMenuClose}
+                        >
+                          <MenuItem
+                            component={Link}
+                            to={{
+                              pathname: "/student-list",
+                              state: { classData: user },
+                            }}
+                            onClick={handleMenuClose}
+                          >
+                            View Student List
+                          </MenuItem>
+                        </Menu>
                       </TableCell>
                     </TableRow>
                   ))}

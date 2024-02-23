@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import axios from "axios";
+import { Box } from "@mui/material";
 
 export default function StudentListInClassHeader() {
   const [classData, setClassData] = useState({});
@@ -28,41 +29,51 @@ export default function StudentListInClassHeader() {
         style={{
           fontSize: "26px",
           marginBottom: "30px",
-          marginTop: "2px",
+
           fontFamily: "Arial, sans-serif",
           backgroundColor: "#2d3748",
           fontWeight: "bold",
           color: "white",
-          padding: "30px",
+          padding: "50px",
         }}
       >
         <h1 style={{ fontSize: "20px" }}>Class</h1>
-        <h2>{classData.class}</h2>
-        <h3 style={{ fontSize: "20px", position: "relative" }}>
-          {classData.class_code}
-          <span
-            style={{
-              position: "absolute",
-              bottom: "-10px",
-              left: "0",
-              width: "50%",
-              borderBottom: "2px solid white",
-            }}
-          ></span>
-        </h3>
-        <MoreHorizIcon
-          style={{
-            marginLeft: "1690px",
-            color: "white",
-            position: "absolute",
-            top: "160px",
-            fontSize: "30px",
-          }}
-        />
 
-        <h4 style={{ fontSize: "18px", color: "white", marginTop: "25px" }}>
-          31 Days (97 Hours)
-        </h4>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box>
+            <h2>{classData.class}</h2>
+            <h3 style={{ fontSize: "20px", position: "relative" }}>
+              {classData.class_code}
+              <span
+                style={{
+                  position: "absolute",
+                  bottom: "-10px",
+                  left: "0",
+                  width: "50%",
+                  borderBottom: "2px solid white",
+                }}
+              ></span>
+            </h3>
+            <h4 style={{ fontSize: "18px", color: "white", marginTop: "25px" }}>
+              31 Days (97 Hours)
+            </h4>
+          </Box>
+          <Box>
+            <MoreHorizIcon
+              style={{
+                color: "white",
+                position: "absolute",
+                top: "160px",
+                fontSize: "30px",
+              }}
+            />
+          </Box>
+        </Box>
       </div>
     </>
   );

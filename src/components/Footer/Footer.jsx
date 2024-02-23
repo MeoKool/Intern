@@ -4,8 +4,6 @@ export default function Footer() {
     color: "#fff",
     padding: "10px",
     textAlign: "center",
-    position: "fixed",
-    bottom: "0",
     width: "100%",
   };
 

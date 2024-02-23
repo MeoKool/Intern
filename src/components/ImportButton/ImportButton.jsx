@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import "./ImportButton.css";
 import { useParams } from "react-router-dom";
+import { FileUpload } from "@mui/icons-material";
 
 export default function ImportButton() {
   const id = useParams() || 1;
@@ -70,8 +71,23 @@ export default function ImportButton() {
   };
 
   return (
-    <div>
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
+    <div
+      style={{
+        float: "right",
+        marginRight: "10px",
+        marginTop: "10px",
+        borderRadius: "4px",
+      }}
+    >
+      <Button
+        sx={{
+          padding: "10px",
+          backgroundColor: "#2F903F",
+        }}
+        variant="contained"
+        onClick={handleClickOpen}
+      >
+        <FileUpload />
         Import
       </Button>
       <Dialog open={open} onClose={handleClose}>

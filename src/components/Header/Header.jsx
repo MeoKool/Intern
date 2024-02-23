@@ -1,6 +1,7 @@
 // header.jsx
 import "./Header.css";
 import FPTlogo from "./img/FPT_logo.png";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   // lấy token trên local storage
@@ -9,7 +10,9 @@ export default function Header() {
     <header className="header">
       <div className="content">
         <div className="navbar">
-          <img src={FPTlogo} alt="FPT Software" />
+          <Link to="/">
+            <img src={FPTlogo} alt="FPT Software" />
+          </Link>
           <div className="actions">
             {/* <a href="/login-register" className="btn action-btn">
               Sign In

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import * as XLSX from "xlsx";
-import { Link } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -19,43 +17,27 @@ import {
   Button,
   Menu,
   MenuItem,
-  Checkbox,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import DownloadIcon from "@mui/icons-material/Download";
+import PublishIcon from "@mui/icons-material/Publish";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import SettingsIcon from "@mui/icons-material/Settings";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ImportContactsIcon from "@mui/icons-material/ImportContacts";
-import AddUser from "./AddUser";
-import ImportButton from "../../components/ImportButton/ImportButton";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
+import { Link } from "react-router-dom";
+import PanToolOutlinedIcon from "@mui/icons-material/PanToolOutlined";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
-const StudentList = () => {
+const Reserve = () => {
   const [users, setUsers] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [moreHorizAnchorEl, setMoreHorizAnchorEl] = useState(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
   const [searchTerm, setSearchTerm] = React.useState("");
-  const [checked, setChecked] = useState({});
   const [selectedOption, setSelectedOption] = useState("fullName");
-  const [deleteConfirmation, setDeleteConfirmation] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const handleButtonClick = () => {
-    setShowForm(true);
-  };
 
-  const handleFormClose = () => {
-    setShowForm(false);
-  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -63,10 +45,6 @@ const StudentList = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-
-  const handleCheck = (event) => {
-    setChecked({ ...checked, [event.target.name]: event.target.checked });
   };
 
   const handleMenuClick = (event) => {
@@ -84,7 +62,7 @@ const StudentList = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://6535e093c620ba9358ecba91.mockapi.io/student"
+        "https://6535e093c620ba9358ecba91.mockapi.io/Resrver"
       );
       setUsers(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
@@ -98,64 +76,6 @@ const StudentList = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const openDeleteConfirmation = (userId) => {
-    setDeleteConfirmation(userId);
-  };
-
-  const closeDeleteConfirmation = () => {
-    setDeleteConfirmation(null);
-  };
-
-  const handleDelete = async () => {
-    try {
-      await axios.delete(
-        `https://6535e093c620ba9358ecba91.mockapi.io/student/${deleteConfirmation}`
-      );
-      closeDeleteConfirmation();
-      fetchUsers();
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
-
-  const exportToExcel = () => {
-    const selectedRows = users.filter((user) => checked[user.id]);
-
-    const dataToExport = selectedRows.map((user) => ({
-      id: user.id,
-      "Full name": user.fullName,
-      "Date of birth": user.dateOfBirth,
-      Email: user.Email,
-      Phone: user.Phone,
-      GPA: user.gpa,
-      RECer: user.reCer,
-      address: user.address,
-      classCode: user.classCode,
-      gender: user.gender,
-      graduatedDate: user.graduatedDate,
-      joinedDate: user.joinedDate,
-      major: user.major,
-      university: user.university,
-      status: user.status,
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(dataToExport);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Student Data");
-    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    const fileName = "student_data.xlsx";
-    const blob = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", fileName);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   const filteredStatus = users.filter((user) => {
@@ -189,7 +109,7 @@ const StudentList = () => {
           marginTop: "1px",
         }}
       >
-        Student List
+        Reserve List
       </h2>
       <Box sx={{ display: "flex" }}>
         <Box component="main" sx={{ flexGrow: 1, p: 5 }}>
@@ -197,7 +117,7 @@ const StudentList = () => {
             <TableContainer component={Paper} className="dashboard-container">
               <div className="header-list">
                 <TextField
-                  label="Search by"
+                  label="Search by ..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   style={{
@@ -224,7 +144,7 @@ const StudentList = () => {
                   onClick={handleClick}
                 >
                   <FilterListIcon />
-                  Filter
+                  Advanced search
                 </Button>
                 <Popover
                   open={Boolean(anchorEl)}
@@ -246,10 +166,8 @@ const StudentList = () => {
                       width: "150px",
                     }}
                   >
-                    <MenuItem value={"id"}>ID</MenuItem>
-
+                    <MenuItem value={"studentId"}>Student code</MenuItem>
                     <MenuItem value={"fullName"}>Full Name</MenuItem>
-
                     <MenuItem value={"Email"}>Email</MenuItem>
                   </Select>
                 </Popover>
@@ -261,12 +179,10 @@ const StudentList = () => {
                     padding: "10px",
                     marginTop: "10px",
                   }}
-                  onClick={handleButtonClick}
                 >
                   <AddCircleOutlineIcon style={{ marginRight: "10px" }} />
                   Add new
                 </Button>
-                {showForm && <AddUser onFormClose={handleFormClose} />}
                 <Button
                   variant="contained"
                   style={{
@@ -276,12 +192,10 @@ const StudentList = () => {
                     marginRight: "10px",
                     marginTop: "10px",
                   }}
-                  onClick={exportToExcel}
                 >
-                  <DownloadIcon />
-                  Export
+                  <PublishIcon />
+                  Import
                 </Button>
-                <ImportButton />
               </div>
               <Table
                 sx={{ minWidth: 650 }}
@@ -309,7 +223,7 @@ const StudentList = () => {
                       }}
                       align="center"
                     >
-                      Date of birth
+                      Student code
                     </TableCell>
                     <TableCell
                       style={{
@@ -319,7 +233,7 @@ const StudentList = () => {
                       }}
                       align="center"
                     >
-                      Email
+                      Gender
                     </TableCell>
                     <TableCell
                       style={{
@@ -329,7 +243,7 @@ const StudentList = () => {
                       }}
                       align="center"
                     >
-                      Phone
+                      Birthday
                     </TableCell>
                     <TableCell
                       style={{
@@ -339,7 +253,7 @@ const StudentList = () => {
                       }}
                       align="center"
                     >
-                      GPA
+                      Hometown
                     </TableCell>
                     <TableCell
                       style={{
@@ -349,7 +263,7 @@ const StudentList = () => {
                       }}
                       align="center"
                     >
-                      RECer
+                      Class
                     </TableCell>
                     <TableCell
                       style={{
@@ -359,39 +273,85 @@ const StudentList = () => {
                       }}
                       align="center"
                     >
-                      <SettingsIcon />
+                      Reserve module
                     </TableCell>
+                    <TableCell
+                      style={{
+                        fontSize: "20px",
+                        fontFamily: "Arial, sans-serif",
+                        color: "white",
+                      }}
+                      align="center"
+                    >
+                      Reason
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        fontSize: "20px",
+                        fontFamily: "Arial, sans-serif",
+                        color: "white",
+                      }}
+                      align="center"
+                    >
+                      Reserve time
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        fontSize: "20px",
+                        fontFamily: "Arial, sans-serif",
+                        color: "white",
+                      }}
+                      align="center"
+                    >
+                      Status
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        fontSize: "20px",
+                        fontFamily: "Arial, sans-serif",
+                        color: "white",
+                      }}
+                      align="center"
+                    ></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {slicedUser.map((user) => (
                     <TableRow key={user.id}>
+                      <TableCell
+                        style={{ fontSize: "13px" }}
+                        align="center"
+                      ></TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        <Checkbox
-                          checked={checked[user.id] || false}
-                          onChange={handleCheck}
-                          name={user.id.toString()}
-                        />
+                        {user.studentId}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        <Link to={`/student-detail/${user.id}`}>
-                          {user.fullName}
-                        </Link>
+                        {user.studentId}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.dateOfBirth}
+                        {user.gender}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.Email}
+                        {new Date(user.dob).toLocaleDateString()}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.Phone}
+                        {user.studentId}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.gpa}
+                        {user.classId}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.reCer}
+                        {user.module}
+                      </TableCell>
+                      <TableCell style={{ fontSize: "13px" }} align="center">
+                        {user.reason}
+                      </TableCell>
+                      <TableCell style={{ fontSize: "13px" }} align="center">
+                        {new Date(user.startDate).toLocaleDateString()} -{" "}
+                        {new Date(user.endDate).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell style={{ fontSize: "13px" }} align="center">
+                        {user.status}
                       </TableCell>
                       <TableCell align="center">
                         <MoreHorizIcon onClick={handleMenuClick} />
@@ -400,25 +360,27 @@ const StudentList = () => {
                           open={Boolean(moreHorizAnchorEl)}
                           onClose={handleMenuClose}
                         >
-                          <MenuItem
-                            component={Link}
-                            to={`/student-detail/${user.id}/edit`}
-                          >
-                            <EditIcon style={{ marginRight: "8px" }} />
-                            Edit Student
-                          </MenuItem>
-
-                          <MenuItem component={Link} to="/score-management">
-                            <ImportContactsIcon
+                          <MenuItem>
+                            <PanToolOutlinedIcon
                               style={{ marginRight: "8px" }}
                             />
-                            Score Management
+                            Re-class
                           </MenuItem>
-                          <MenuItem
-                            onClick={() => openDeleteConfirmation(user.id)}
-                          >
-                            <DeleteForeverIcon style={{ marginRight: "8px" }} />
-                            Delete Student
+                          <MenuItem component={Link} to="/score-management">
+                            <EmailOutlinedIcon style={{ marginRight: "8px" }} />
+                            Remind
+                          </MenuItem>
+                          <MenuItem>
+                            <StopCircleOutlinedIcon
+                              style={{ marginRight: "8px" }}
+                            />
+                            Drop class
+                          </MenuItem>
+                          <MenuItem>
+                            <CancelOutlinedIcon
+                              style={{ marginRight: "8px" }}
+                            />
+                            Remove reserve
                           </MenuItem>
                         </Menu>
                       </TableCell>
@@ -439,27 +401,8 @@ const StudentList = () => {
           </div>
         </Box>
       </Box>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog
-        open={Boolean(deleteConfirmation)}
-        onClose={closeDeleteConfirmation}
-      >
-        <DialogTitle>Delete Confirmation</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this student?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDeleteConfirmation}>Cancel</Button>
-          <Button onClick={handleDelete} color="error">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 };
 
-export default StudentList;
+export default Reserve;
