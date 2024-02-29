@@ -1,0 +1,140 @@
+{
+  "id": 1,
+  "className": "Mathematics 101",
+  "startDate": "2024-03-01T10:00:00.000Z",
+  "endDate": "2024-06-01T14:00:00.000Z",
+  "createdDate": "2024-02-28T02:31:51.041Z",
+  "createdUserId": 1,
+  "updatedDate": "2024-02-28T02:31:51.041Z",
+  "updatedUserId": 1,
+  "duration": "3 months",
+  "location": "Room 101",
+  "status": "Active",
+  "programId": 1,
+  "managers": [
+    {
+      "id": 1,
+      "role": "SuperAdmin",
+      "fullName": "John Doe",
+      "gender": "Male",
+      "email": "john.doe@example.com"
+    }
+  ],
+  "program": {
+    "id": 1,
+    "programName": "Bachelor's in Mathematics",
+    "status": "Ongoing",
+    "code": "MATH101",
+    "duration": "4 years",
+    "createdDate": "2024-02-28T02:31:51.042Z",
+    "createdUserId": "string",
+    "updatedDate": "2024-02-28T02:31:51.042Z",
+    "updatedUserId": "string",
+    "createdUser": {
+      "id": 1,
+      "role": "SuperAdmin",
+      "fullName": "John Doe",
+      "gender": "Male",
+      "email": "john.doe@example.com"
+    },
+    "updatedUser": {
+      "id": 1,
+      "role": "SuperAdmin",
+      "fullName": "John Doe",
+      "gender": "Male",
+      "email": "john.doe@example.com"
+    }
+  },
+  "createdUser": {
+    "id": 1,
+    "role": "SuperAdmin",
+    "fullName": "John Doe",
+    "gender": "Male",
+    "email": "john.doe@example.com"
+  },
+  "updatedUser": {
+    "id": 1,
+    "role": "SuperAdmin",
+    "fullName": "John Doe",
+    "gender": "Male",
+    "email": "john.doe@example.com"
+  },
+  "studentClasses": [
+    {
+      "classId": 1,
+      "studentId": 1,
+      "attendingStatus": "InClass",
+      "Result": "Passed",
+      "FinalScore": 95,
+      "GpaLevel": "APlus",
+      "certificateStatus": "Enable",
+      "certificateDate": "2024-06-01T14:00:00.000Z",
+      "student": {
+        "id": 1,
+        "phone": "123-456-7890",
+        "email": "student@example.com",
+        "fullName": "Jane Smith",
+        "gender": "Female",
+        "major": "Mathematics",
+        "dob": "2000-01-15T00:00:00.000Z",
+        "graduatedDate": 0,
+        "gpa": 3.9,
+        "address": "123 Main St, Cityville",
+        "status": "Active",
+        "reCer": "string",
+        "joinedDate": "2024-02-28T02:31:51.042Z",
+        "university": "City University",
+        "classCode": 101
+      }
+    }
+  ],
+  "reservations": [
+    {
+      "id": 1,
+      "classId": 1,
+      "studentId": 1,
+      "reason": "Family emergency",
+      "startDate": "2024-05-01T08:00:00.000Z",
+      "endDate": "2024-05-05T17:00:00.000Z",
+      "class": {
+        "id": 1,
+        "className": "Mathematics 101",
+        "startDate": "2024-03-01T10:00:00.000Z",
+        "endDate": "2024-06-01T14:00:00.000Z",
+        "createdDate": "2024-02-28T02:31:51.042Z",
+        "createdUserId": 1,
+        "updatedDate": "2024-02-28T02:31:51.042Z",
+        "updatedUserId": 1,
+        "duration": "3 months",
+        "location": "Room 101",
+        "status": "Active",
+        "programId": 1,
+        "program": {
+          "id": 1,
+          "programName": "Bachelor's in Mathematics",
+          "status": "Ongoing",
+          "code": "MATH101",
+          "duration": "4 years",
+          "createdDate": "2024-02-28T02:31:51.042Z",
+          "createdUserId": "string",
+          "updatedDate": "2024-02-28T02:31:51.042Z",
+          "updatedUserId": "string",
+          "createdUser": {
+            "id": 1,
+            "role": "SuperAdmin",
+            "fullName": "John Doe",
+            "gender": "Male",
+            "email": "john.doe@example.com"
+          },
+          "updatedUser": {
+            "id": 1,
+            "role": "SuperAdmin",
+            "fullName": "John Doe",
+            "gender": "Male",
+            "email": "john.doe@example.com"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,16 +1,17 @@
 .body-container {
-    height: 100vh;
+    /* height: 100vh; */
     display: grid;
     place-content: center;
 }
 
 .container {
-    position: relative;
+    position: sticky;
     width: 850px;
     height: 650px;
     box-shadow: 25px 30px 55px #5557;
     border-radius: 13px;
     overflow: hidden;
+    margin: 20px 0;
 }
 .form-box-container {
     position: absolute;
@@ -40,7 +41,7 @@
 
 .sign-up-title {
     color: #141e30;
-    font-size: 2.4rem;
+    font-size: 2rem;
     font-weight: bolder;
 }
 
@@ -137,7 +138,7 @@
     cursor: pointer;
     position: absolute;
     left: 50%;
-    top: 377px;
+    top: 375px;
     transform: translateX(-50%);
     width: 143.67px;
     height: 40px;

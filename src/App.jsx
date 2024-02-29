@@ -1,7 +1,6 @@
-import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import StudentList from "./pages/studentList";
-import ClassList from "./pages/classList";
 import "./App.css";
 import MainPage from "./pages/MainPage/MainPage";
 import StudentDetails from "./components/student-details/StudentDetails";
@@ -10,7 +9,15 @@ import StudentDetailEditCommon from "./components/student-details/student-detail
 import ScoreManagement from "./pages/ScoreManagement/ScoreManagement";
 import ReserverList from "./pages/ReseverList";
 import ErrorPage from "./pages/ErrorPage";
+import { useEffect } from "react";
+import ClassList from "./pages/classList";
+import ClassDetail from "./components/ClassDetail/ClassDetail";
+
 function App() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const createRoute = (path, page) => (
     <Route path={path} element={<MainPage page={page} />} />
   );
@@ -40,26 +47,10 @@ function App() {
           {createRoute("/calendar-setting", <ErrorPage />)}
           {createRoute("/view-program", <ErrorPage />)}
           {createRoute("/home", <ErrorPage />)}
+          {createRoute("/class/:id", <ClassDetail />)}
           {createRoute("/class/student-detail/:id", <StudentDetails />)}
           {createRoute("/student-detail/:id", <StudentDetailsCommon />)}
           {createRoute("/student-detail/:id/edit", <StudentDetailEditCommon />)}
-
-          {/* <Route path="/" element={<MainPage />} />
-           <Route path="/login-register" element={<LoginPage />} />
-           <Route path="/student-list" element={<StudentList />} />
-           <Route path="/score-management" element={<ScoreManagement />} />
-          <Route path="/reserve-list" element={<ReserverList />} />
-          <Route path="/view-syllabus" />
-           <Route path="/create-syllabus" />
-           <Route path="/view-problem" />
-          <Route path="/create-problem" />
-           <Route path="/view-class" element={<ClassList />} />
-          <Route path="/create-class" />
-           <Route path="/training-calender" />
-           <Route path="/user-list" />
-           <Route path="/user-permission" />
-           <Route path="/learning materials" />
-           <Route path="/Calendar" /> */}
         </Routes>
       </BrowserRouter>
     </>

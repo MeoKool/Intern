@@ -24,6 +24,7 @@ import {
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ImportButton from "../../components/ImportButton/ImportButton";
 
 const ScoreManagement = () => {
   const [students, setStudents] = useState([]);
@@ -61,10 +62,12 @@ const ScoreManagement = () => {
   useEffect(() => {
     fetchStudents();
   }, []);
-  
+
   const fetchStudents = async () => {
     try {
-      const response = await axios.get("https://65d33fc8522627d5010867f8.mockapi.io/student");
+      const response = await axios.get(
+        "https://65d33fc8522627d5010867f8.mockapi.io/student"
+      );
       const studentData = Array.isArray(response.data) ? response.data : [];
       setStudents(studentData);
       if (studentData.length > 0) {
@@ -138,13 +141,17 @@ const ScoreManagement = () => {
             color: "white",
             padding: "30px",
             marginTop: "1px",
-            boxSizing: "border-box", 
-            display: "block"
+            boxSizing: "border-box",
+            display: "block",
           }}
         >
           {student.className}
         </h2>
-            
+
+        <Box>
+          <ImportButton />
+        </Box>
+
         <Box sx={{ display: "flex", flexGrow: 1, overflowX: "auto" }}>
           <TableContainer component={Paper} className="dashboard-container">
             <div className="header-list">
@@ -173,56 +180,276 @@ const ScoreManagement = () => {
                 </Select>
               </Popover>
             </div>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table" className="staff-table">
+            <Table
+              sx={{ minWidth: 650 }}
+              aria-label="simple table"
+              className="staff-table"
+            >
               <TableHead style={{ backgroundColor: "#2d3748" }}>
                 <TableRow>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Full name</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Account</TableCell>
-                  <TableCell style={{borderRight: "2px solid red"}}> </TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={7}>Quiz</TableCell>
-                  <TableCell style={{borderRight: "2px solid red"}}> </TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={4}>ASM</TableCell>
-                  <TableCell style={{borderRight: "2px solid red"}}> </TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Quiz Final</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Audit</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Practice Final</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Final Module</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>GPA module</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Level module</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Status</TableCell>
-                  <TableCell style={{borderRight: "2px solid red"}}> </TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>MOCK</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Final module</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>GPA module</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Level module</TableCell>
-                  <TableCell style={{ fontSize: "20px", fontFamily: "Arial, sans-serif", color: "white", whiteSpace: "nowrap" }} align="center" colSpan={1}>Status</TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Full name
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Account
+                  </TableCell>
+                  <TableCell style={{ borderRight: "2px solid red" }}>
+                    {" "}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={7}
+                  >
+                    Quiz
+                  </TableCell>
+                  <TableCell style={{ borderRight: "2px solid red" }}>
+                    {" "}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={4}
+                  >
+                    ASM
+                  </TableCell>
+                  <TableCell style={{ borderRight: "2px solid red" }}>
+                    {" "}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Quiz Final
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Audit
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Practice Final
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Final Module
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    GPA module
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Level module
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Status
+                  </TableCell>
+                  <TableCell style={{ borderRight: "2px solid red" }}>
+                    {" "}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    MOCK
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Final module
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    GPA module
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Level module
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Status
+                  </TableCell>
                   <TableCell></TableCell>
                 </TableRow>
-                <TableRow style={{backgroundColor: "#536878"}}>
-                  <TableCell> </TableCell>
-                  <TableCell > </TableCell>
-                  <TableCell style={{borderRight: "2px solid red"}}> </TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>HTML</TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>CSS</TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>Quiz 3</TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>Quiz 4</TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>Quiz 5</TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>Quiz 6</TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>AVG</TableCell>
-                  <TableCell style={{borderRight: "2px solid red", position: ""}}> </TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>Practice 1</TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>Practice 2</TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>Practice 3</TableCell>
-                  <TableCell style={{whiteSpace: "nowrap", color: "white"}}>AVG</TableCell>
-                  <TableCell style={{borderRight: "2px solid red"}}> </TableCell>
+                <TableRow style={{ backgroundColor: "#536878" }}>
                   <TableCell> </TableCell>
                   <TableCell> </TableCell>
+                  <TableCell style={{ borderRight: "2px solid red" }}>
+                    {" "}
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    HTML
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    CSS
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    Quiz 3
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    Quiz 4
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    Quiz 5
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    Quiz 6
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    AVG
+                  </TableCell>
+                  <TableCell
+                    style={{ borderRight: "2px solid red", position: "" }}
+                  >
+                    {" "}
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    Practice 1
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    Practice 2
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    Practice 3
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap", color: "white" }}>
+                    AVG
+                  </TableCell>
+                  <TableCell style={{ borderRight: "2px solid red" }}>
+                    {" "}
+                  </TableCell>
                   <TableCell> </TableCell>
                   <TableCell> </TableCell>
                   <TableCell> </TableCell>
                   <TableCell> </TableCell>
                   <TableCell> </TableCell>
-                  <TableCell style={{borderRight: "2px solid red"}}> </TableCell>
+                  <TableCell> </TableCell>
+                  <TableCell> </TableCell>
+                  <TableCell style={{ borderRight: "2px solid red" }}>
+                    {" "}
+                  </TableCell>
                   <TableCell> </TableCell>
                   <TableCell> </TableCell>
                   <TableCell> </TableCell>
@@ -237,10 +464,14 @@ const ScoreManagement = () => {
                     <TableCell style={{ fontSize: "13px" }} align="center">
                       {student.fullName}
                     </TableCell>
-                    <TableCell style={{ fontSize: "13px"}} align="center">
+                    <TableCell style={{ fontSize: "13px" }} align="center">
                       {student.account}
                     </TableCell>
-                    <TableCell style={{ fontSize: "13px", borderRight: "2px solid red" }}> </TableCell>
+                    <TableCell
+                      style={{ fontSize: "13px", borderRight: "2px solid red" }}
+                    >
+                      {" "}
+                    </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
                       {student.quizHTML}
                     </TableCell>
@@ -262,7 +493,9 @@ const ScoreManagement = () => {
                     <TableCell style={{ fontSize: "13px" }} align="center">
                       {student.avgQuiz}
                     </TableCell>
-                    <TableCell style={{borderRight: "2px solid red"}}> </TableCell>
+                    <TableCell style={{ borderRight: "2px solid red" }}>
+                      {" "}
+                    </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
                       {student.Practice1}
                     </TableCell>
@@ -275,7 +508,9 @@ const ScoreManagement = () => {
                     <TableCell style={{ fontSize: "13px" }} align="center">
                       {student.avgASM}
                     </TableCell>
-                    <TableCell style={{borderRight: "2px solid red"}}> </TableCell>
+                    <TableCell style={{ borderRight: "2px solid red" }}>
+                      {" "}
+                    </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
                       {student.quizFinal}
                     </TableCell>
@@ -305,11 +540,13 @@ const ScoreManagement = () => {
                         badgeContent={calculateStatus(student.GPAModule1)}
                       />
                     </TableCell>
-                    <TableCell style={{borderRight: "2px solid red"}}> </TableCell>
+                    <TableCell style={{ borderRight: "2px solid red" }}>
+                      {" "}
+                    </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
                       {student.MOCK}
                     </TableCell>
-                    <TableCell style={{ fontSize: "13px", }} align="center">
+                    <TableCell style={{ fontSize: "13px" }} align="center">
                       {student.Finalmodule2}
                     </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
@@ -341,9 +578,7 @@ const ScoreManagement = () => {
                           <DeleteForeverIcon style={{ marginRight: "8px" }} />
                           Delete Score
                         </MenuItem>
-                        <MenuItem>
-                          Final Studying Result 
-                        </MenuItem>
+                        <MenuItem>Final Studying Result</MenuItem>
                       </Menu>
                     </TableCell>
                   </TableRow>

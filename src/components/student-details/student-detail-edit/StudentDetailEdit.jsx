@@ -1,53 +1,55 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import './StudentDetailEdit.scss'
+import "./StudentDetailEdit.scss";
 
-import { Box, Button, Grid, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Box, Button, Grid, TextField, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import dayjs from "dayjs";
 
 export default function StudentDetailsCommon() {
-
     const [user, setUser] = useState({});
-    let param = useParams()
+    const [certificationStatus, setCertificationStatus] = useState("Not yet");
+    const [certificationDate, setCertificationDate] = useState(dayjs());
+    const [isSaveEnabled, setIsSaveEnabled] = useState(false);
+    let param = useParams();
 
     const classStatus = [
         {
-            code: 'on-boarding',
-            label: 'On boarding',
-            color: '#2d3748'
+            code: "on-boarding",
+            label: "On boarding",
+            color: "#2d3748",
         },
         {
-            code: 'finish-class',
-            label: 'Finish class',
-            color: '#2F903F'
-        }
-    ]
+            code: "finish-class",
+            label: "Finish class",
+            color: "#2F903F",
+        },
+    ];
 
     const classes = [
         {
             id: 1,
-            name: 'DevOps Foundation',
-            status: 'on-boarding',
+            name: "DevOps Foundation",
+            status: "on-boarding",
             class: {
-                name: 'HCM21_FR_DevOps_01',
-                startDate: '22/04/2021',
-                endDate: '22/10/2021'
-            }
+                name: "HCM21_FR_DevOps_01",
+                startDate: "22/04/2021",
+                endDate: "22/10/2021",
+            },
         },
         {
             id: 2,
-            name: 'DevOps Advanced',
-            status: 'finish-class',
+            name: "DevOps Advanced",
+            status: "finish-class",
             class: {
-                name: 'HCM21_FR_DevOps_01',
-                startDate: '22/04/2021',
-                endDate: '22/10/2021'
-            }
-        }
-    ]
+                name: "HCM21_FR_DevOps_01",
+                startDate: "22/04/2021",
+                endDate: "22/10/2021",
+            },
+        },
+    ];
 
     const fetchUser = async (id) => {
         try {
@@ -60,43 +62,74 @@ export default function StudentDetailsCommon() {
 
     useEffect(() => {
         fetchUser(param.id);
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        const isCertificateEnabled = user.status === "Finish" && user.points === "Full";
+        setIsSaveEnabled(isCertificateEnabled);
+    }, [user]);
+    const handleCertificationStatusChange = (event) => {
+        setCertificationStatus(event.target.value);
+        if (event.target.value === "Done") {
+            setCertificationDate(dayjs());
+        }
+    };
+
+    const handleCertificationDateChange = (date) => {
+        setCertificationDate(date);
+    };
+    const handleSave = () => {
+        if (isSaveEnabled) {
+            // Perform save operation
+            console.log("Information is edited successfully");
+        } else {
+            console.log("Certificate information cannot be saved. Conditions not met.");
+        }
+    };
 
     const ClassContainer = () => {
-
         const getClassStatus = (statusCode) => {
-            const statusObject = classStatus.find(status => status.code === statusCode);
+            const statusObject = classStatus.find((status) => status.code === statusCode);
 
-            return statusObject ? statusObject : { code: 'default', label: 'Default', color: '#000000' };
+            return statusObject ? statusObject : { code: "default", label: "Default", color: "#000000" };
         };
 
         return (
-            <Box className={'student-detail-edit--class-container'}>
-                <Button className='btn-blank' sx={{ marginRight: '25px' }}>
+            <Box className={"student-detail-edit--class-container"}>
+                <Button className="btn-blank" sx={{ marginRight: "25px" }}>
                     <AddCircleOutlineIcon sx={{ fontSize: 35 }} />
                 </Button>
-                {classes.map(c => {
+                {classes.map((c) => {
                     let status = getClassStatus(c.status);
                     return (
-                        <Box key={c.id} className={'student-detail-edit--class-card'}>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <span className='text-wrap' style={{ fontSize: 25, fontWeight: 600 }}>
+                        <Box key={c.id} className={"student-detail-edit--class-card"}>
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <span className="text-wrap" style={{ fontSize: 25, fontWeight: 600 }}>
                                     {c.name}
                                 </span>
-                                <span className='text-wrap student-detail-edit--class-card-status' style={{ backgroundColor: status.color }}>{status.label}</span>
+                                <span
+                                    className="text-wrap student-detail-edit--class-card-status"
+                                    style={{ backgroundColor: status.color }}
+                                >
+                                    {status.label}
+                                </span>
                             </div>
                             <div>
-                                <p style={{ color: '#2b3748', fontWeight: 600, paddingTop: '20px', fontSize: 14 }}>{c.class.name} | {c.class.startDate} - {c.class.endDate}</p>
+                                <p style={{ color: "#2b3748", fontWeight: 600, paddingTop: "20px", fontSize: 14 }}>
+                                    {c.class.name} | {c.class.startDate} - {c.class.endDate}
+                                </p>
                             </div>
                             <div>
-                                <p style={{ color: '#2b3748', paddingTop: '20px', fontSize: '14px' }}>Note about this</p>
+                                <p style={{ color: "#2b3748", paddingTop: "20px", fontSize: "14px" }}>
+                                    Note about this
+                                </p>
                             </div>
                         </Box>
                     );
                 })}
             </Box>
-        )
-    }
+        );
+    };
 
     return (
         <>
@@ -115,10 +148,8 @@ export default function StudentDetailsCommon() {
                 Student Details
             </h2>
             <Box>
-                <Box className='student-detail-edit--label'>
-                    General
-                </Box>
-                <Box className='student-detail-edit--box'>
+                <Box className="student-detail-edit--label">General</Box>
+                <Box className="student-detail-edit--box">
                     <Grid container spacing={4}>
                         <Grid item md={6}>
                             <div className="student-detail-edit--info-field">
@@ -132,7 +163,7 @@ export default function StudentDetailsCommon() {
                             <div className="student-detail-edit--info-field">
                                 <span className="student-detail-edit--info-label">Gender</span>
                                 <FormControl fullWidth>
-                                    <Select id="gender" value={'male'}>
+                                    <Select id="gender" value={"male"}>
                                         <MenuItem value="male">Male</MenuItem>
                                         <MenuItem value="female">Female</MenuItem>
                                         <MenuItem value="others">Others</MenuItem>
@@ -141,7 +172,7 @@ export default function StudentDetailsCommon() {
                             </div>
                             <div className="student-detail-edit--info-field">
                                 <span className="student-detail-edit--info-label">Date of birth</span>
-                                <DatePicker defaultValue={dayjs('2003-04-15')} />
+                                <DatePicker defaultValue={dayjs("2003-04-15")} />
                             </div>
                             <div className="student-detail-edit--info-field">
                                 <span className="student-detail-edit--info-label">Status</span>
@@ -164,7 +195,11 @@ export default function StudentDetailsCommon() {
                             <div className="student-detail-edit--info-field">
                                 <span className="student-detail-edit--info-label">Permanent residence</span>
                                 <FormControl fullWidth>
-                                    <Select labelId="permanentResidence-label" id="permanentResidence" value={user.permanentResidence}>
+                                    <Select
+                                        labelId="permanentResidence-label"
+                                        id="permanentResidence"
+                                        value={user.permanentResidence}
+                                    >
                                         <MenuItem value="AAA">AAA</MenuItem>
                                     </Select>
                                 </FormControl>
@@ -176,30 +211,41 @@ export default function StudentDetailsCommon() {
                             <div className="student-detail-edit--info-field">
                                 <span className="student-detail-edit--info-label">Certification status</span>
                                 <FormControl fullWidth>
-                                    <Select labelId="certificationStatus-label" id="certificationStatus" value={user.certificationStatus}>
+                                    <Select
+                                        labelId="certificationStatus-label"
+                                        id="certificationStatus"
+                                        value={certificationStatus}
+                                        onChange={handleCertificationStatusChange}
+                                    >
                                         <MenuItem value="Done">Done</MenuItem>
+                                        <MenuItem value="Not yet">Not yet</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
-                            <div className="student-detail-edit--info-field">
-                                <span className="student-detail-edit--info-label">Certification date</span>
-                                <DatePicker defaultValue={dayjs(new Date())} />
 
-                            </div>
+                            {certificationStatus === "Not yet" && (
+                                <div className="student-detail-edit--info-field">
+                                    <span className="student-detail-edit--info-label">Certification date</span>
+                                    <DatePicker value={certificationDate} onChange={handleCertificationDateChange} />
+                                </div>
+                            )}
                         </Grid>
                     </Grid>
-                    <Box className='student-detail-edit--btn-action'>
-                        <Button className='student-detail-edit--btn-action-cancel'>Cancel</Button>
-                        <Button className='student-detail-edit--btn-action-save'>Save</Button>
+                    <Box className="student-detail-edit--btn-action">
+                        <Button className="student-detail-edit--btn-action-cancel">Cancel</Button>
+                        <Button
+                            className="student-detail-edit--btn-action-save"
+                            disabled={!isSaveEnabled}
+                            onClick={handleSave}
+                        >
+                            Save
+                        </Button>
                     </Box>
                 </Box>
-
             </Box>
             <Box>
-                <Box className='student-detail-edit--label'>
-                    Others
-                </Box>
-                <Box className='student-detail-edit--box'>
+                <Box className="student-detail-edit--label">Others</Box>
+                <Box className="student-detail-edit--box">
                     <Grid container spacing={4}>
                         <Grid item md={6}>
                             <div className="student-detail-edit--info-field">
@@ -234,32 +280,28 @@ export default function StudentDetailsCommon() {
                             </div>
                         </Grid>
                     </Grid>
-                    <Box className='student-detail-edit--btn-action'>
-                        <Button className='student-detail-edit--btn-action-cancel'>Cancel</Button>
-                        <Button className='student-detail-edit--btn-action-save'>Save</Button>
+                    <Box className="student-detail-edit--btn-action">
+                        <Button className="student-detail-edit--btn-action-cancel">Cancel</Button>
+                        <Button className="student-detail-edit--btn-action-save">Save</Button>
                     </Box>
                 </Box>
-
             </Box>
             <Box>
-                <Box className='student-detail-edit--label'>
-                    Class information
-                </Box>
-                <Box className='student-detail-edit--box'>
+                <Box className="student-detail-edit--label">Class information</Box>
+                <Box className="student-detail-edit--box">
                     <ClassContainer />
-                    <Box className='student-detail-edit--btn-action'>
-                        <Button className='student-detail-edit--btn-action-cancel'>Cancel</Button>
-                        <Button className='student-detail-edit--btn-action-save'>Save</Button>
+                    <Box className="student-detail-edit--btn-action">
+                        <Button className="student-detail-edit--btn-action-cancel">Cancel</Button>
+                        <Button className="student-detail-edit--btn-action-save">Save</Button>
                     </Box>
                 </Box>
-
             </Box>
             <Box>
-                <Box className='student-detail-edit--label'>
-                    Reserving
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button className='student-detail-edit--btn-reserve'><AddCircleOutlineIcon /> Add reserving</Button>
+                <Box className="student-detail-edit--label">Reserving</Box>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <Button className="student-detail-edit--btn-reserve">
+                        <AddCircleOutlineIcon /> Add reserving
+                    </Button>
                 </Box>
             </Box>
         </>

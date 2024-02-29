@@ -13,7 +13,6 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
   TextField,
 } from "@mui/material";
@@ -24,19 +23,9 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 const ClassList = () => {
   const [users, setUsers] = useState([]);
-  const [rowOfPage, setRowOfPage] = useState();
-  const [page, setPage] = React.useState(0);
   const [searchItem, setSearchItem] = React.useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [moreHorizAnchorEl, setMoreHorizAnchorEl] = useState(null);
+  const [moreHorizAnchorEls, setMoreHorizAnchorEls] = useState({});
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-  const handleChangePageRow = (event) => {
-    setRowOfPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
   useEffect(() => {
     fetchUser();
   }, []);
@@ -52,14 +41,22 @@ const ClassList = () => {
     }
   };
 
-  // const SliceUser = filtered.slice(page * rowOfPage, (page + 1) * rowOfPage);
-  const handleMenuClick = (event) => {
-    setMoreHorizAnchorEl(event.currentTarget);
+  const handleMenuClick = (event, userId) => {
+    // Set the anchor element for the clicked row
+    setMoreHorizAnchorEls((prevEls) => ({
+      ...prevEls,
+      [userId]: event.currentTarget,
+    }));
   };
 
-  const handleMenuClose = () => {
-    setMoreHorizAnchorEl(null);
+  const handleMenuClose = (userId) => {
+    // Close the menu for the specific row
+    setMoreHorizAnchorEls((prevEls) => ({
+      ...prevEls,
+      [userId]: null,
+    }));
   };
+
   return (
     <>
       <h1
@@ -129,12 +126,12 @@ const ClassList = () => {
               >
                 <TableHead style={{ backgroundColor: "#2d3748" }}>
                   <TableRow>
-                    <TableCell></TableCell>
                     <TableCell
                       style={{
                         fontSize: "20px",
                         fontFamily: "Arial, sans-serif",
                         color: "white",
+                        textAlign: "center",
                       }}
                     >
                       Class
@@ -144,6 +141,7 @@ const ClassList = () => {
                         fontSize: "20px",
                         fontFamily: "Arial, sans-serif",
                         color: "white",
+                        textAlign: "center",
                       }}
                     >
                       Class Code
@@ -153,6 +151,7 @@ const ClassList = () => {
                         fontSize: "20px",
                         fontFamily: "Arial, sans-serif",
                         color: "white",
+                        textAlign: "center",
                       }}
                     >
                       Create On
@@ -162,6 +161,7 @@ const ClassList = () => {
                         fontSize: "20px",
                         fontFamily: "Arial, sans-serif",
                         color: "white",
+                        textAlign: "center",
                       }}
                     >
                       Create By
@@ -171,6 +171,7 @@ const ClassList = () => {
                         fontSize: "20px",
                         fontFamily: "Arial, sans-serif",
                         color: "white",
+                        textAlign: "center",
                       }}
                     >
                       Duration
@@ -180,6 +181,7 @@ const ClassList = () => {
                         fontSize: "20px",
                         fontFamily: "Arial, sans-serif",
                         color: "white",
+                        textAlign: "center",
                       }}
                     >
                       Attendee
@@ -189,6 +191,7 @@ const ClassList = () => {
                         fontSize: "20px",
                         fontFamily: "Arial, sans-serif",
                         color: "white",
+                        textAlign: "center",
                       }}
                     >
                       Location
@@ -198,6 +201,7 @@ const ClassList = () => {
                         fontSize: "20px",
                         fontFamily: "Arial, sans-serif",
                         color: "white",
+                        textAlign: "center",
                       }}
                     >
                       FSU
@@ -207,7 +211,7 @@ const ClassList = () => {
                 </TableHead>
                 <TableBody>
                   {users.map((user) => (
-                    <TableRow key={user.id}>
+                    <TableRow key={user.Id}>
                       <TableCell style={{ fontSize: "15px" }} align="center">
                         {user.class}
                       </TableCell>
@@ -233,19 +237,21 @@ const ClassList = () => {
                         {user.fsu}
                       </TableCell>
                       <TableCell align="center">
-                        <MoreHorizIcon onClick={handleMenuClick} />
+                        <MoreHorizIcon
+                          onClick={(event) => handleMenuClick(event, user.Id)}
+                        />
                         <Menu
-                          anchorEl={moreHorizAnchorEl}
-                          open={Boolean(moreHorizAnchorEl)}
-                          onClose={handleMenuClose}
+                          anchorEl={moreHorizAnchorEls[user.Id]}
+                          open={Boolean(moreHorizAnchorEls[user.Id])}
+                          onClose={() => handleMenuClose(user.Id)}
                         >
                           <MenuItem
                             component={Link}
                             to={{
-                              pathname: "/student-list",
+                              pathname: `/class/${user.Id}`,
                               state: { classData: user },
                             }}
-                            onClick={handleMenuClose}
+                            onClick={() => handleMenuClose(user.Id)}
                           >
                             View Student List
                           </MenuItem>
@@ -255,15 +261,6 @@ const ClassList = () => {
                   ))}
                 </TableBody>
               </Table>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={users.length}
-                rowsPerPage={rowOfPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangePageRow}
-              />
             </TableContainer>
           </div>
         </Box>

@@ -23,9 +23,7 @@ const Form = () => {
                         <div className="overlay">
                             <div className="overlay-panel overlay-left">
                                 <h1 className="sign-up-title">Welcome Back!</h1>
-                                <p className="intro-text">
-                                    To keep connected with us please login with your personal info
-                                </p>
+                                <p className="intro-text">Connected with us please login with your personal info</p>
                                 <button className="btn-form">Sign In</button>
                             </div>
                             <div className="overlay-panel overlay-right">

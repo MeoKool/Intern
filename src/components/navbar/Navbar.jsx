@@ -200,10 +200,11 @@ export default function Navbar() {
             {toggle ? <CloseIcon /> : <MenuOutlinedIcon />}
           </ListItemIcon>
         </ListItemButton>
-        {menuList.map((menu) => (
+        {menuList.map((menu, i) => (
           <>
             {menu.submenu == null || menu.submenu.length == 0 ? (
               <Link
+                key={i}
                 to={`/${menu.id}`}
                 style={{ textDecoration: "none", color: "#000" }}
               >
@@ -218,8 +219,9 @@ export default function Navbar() {
                 <List component="div" disablePadding>
                   {menu.submenu != null &&
                     menu.submenu.length > 0 &&
-                    menu.submenu.map((submenu) => (
+                    menu.submenu.map((submenu, i) => (
                       <Link
+                        key={i}
                         to={`/${submenu.id}`}
                         style={{ textDecoration: "none", color: "#000" }}
                       >

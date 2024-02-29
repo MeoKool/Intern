@@ -1,7 +1,6 @@
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
-import ImportButton from "../../components/ImportButton/ImportButton";
 import { Box, Grid } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 
@@ -39,7 +38,7 @@ const MainPage = ({ page }) => {
             <Box>
               <Navbar />
             </Box>
-            <Box sx={{ marginTop: "80px" }}>
+            <Box sx={{ marginTop: "80px", marginBottom: "20px" }}>
               {page}
               <Footer />
             </Box>

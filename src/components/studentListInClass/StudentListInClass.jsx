@@ -36,9 +36,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import AddUser from "./AddUser";
-import ImportButton from "../../components/ImportButton/ImportButton";
+import ImportButton from "../ImportButton/ImportButton";
 
-const StudentList = () => {
+const StudentListInClass = () => {
   const [users, setUsers] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [moreHorizAnchorEl, setMoreHorizAnchorEl] = useState(null);
@@ -281,6 +281,7 @@ const StudentList = () => {
                   <DownloadIcon />
                   Export
                 </Button>
+                <ImportButton />
               </div>
               <Table
                 sx={{ minWidth: 650 }}
@@ -377,7 +378,7 @@ const StudentList = () => {
                           style={{
                             color: "black",
                           }}
-                          to={`/student-detail/${user.id}`}
+                          to={`/class/student-detail/${user.id}`}
                         >
                           {user.fullName}
                         </Link>
@@ -466,4 +467,4 @@ const StudentList = () => {
   );
 };
 
-export default StudentList;
+export default StudentListInClass;

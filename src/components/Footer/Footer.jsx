@@ -5,6 +5,9 @@ export default function Footer() {
     padding: "10px",
     textAlign: "center",
     width: "100%",
+    position: "fixed",
+    bottom: "0",
+    zIndex: "10",
   };
 
   return (
