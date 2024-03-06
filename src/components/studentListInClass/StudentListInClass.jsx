@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   Box,
   Paper,
@@ -39,6 +39,7 @@ import AddUser from "./AddUser";
 import ImportButton from "../ImportButton/ImportButton";
 
 const StudentListInClass = () => {
+  const { id } = useParams();
   const [users, setUsers] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [moreHorizAnchorEl, setMoreHorizAnchorEl] = useState(null);
@@ -378,7 +379,7 @@ const StudentListInClass = () => {
                           style={{
                             color: "black",
                           }}
-                          to={`/class/student-detail/${user.id}`}
+                          to={`/class/${id}/student-detail/${user.id}`}
                         >
                           {user.fullName}
                         </Link>

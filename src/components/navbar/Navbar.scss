@@ -1,8 +1,9 @@
+@import '../../sass/common.scss';
+
 .navbar {
   &--box {
     z-index: 3;
     width: 100%;
-    margin-top: 80px;
     max-width: 256px;
     background-color: #edf2f7;
     position: fixed;
@@ -18,14 +19,41 @@
 
   &--menu-close {
     margin-bottom: 5px !important;
+    position: fixed;
   }
 
   &--menu-btn {
     height: 50px;
+
+    &-selected {
+      background-color: #dadada !important;
+      border-left: 4px solid $color-primary !important;
+    }
   }
 
   &--menu-icon {
     min-width: 40px !important;
+  }
+
+  &--menu-items {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto !important;
+    padding-bottom: 30px;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 0.5em;
+     }
+   
+     &::-webkit-scrollbar-thumb {
+      background-color: #8a8a8a;
+      border-radius: 3px;
+   
+      &:hover {
+       background: $color-primary;
+      }
+     }
   }
 
   &--menu-sub-btn {

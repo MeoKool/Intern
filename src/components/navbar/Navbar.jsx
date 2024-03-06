@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import "./Navbar.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { ExpandMore, ExpandLess } from "@mui/icons-material";
@@ -23,8 +23,11 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 
-export default function Navbar() {
+export default function Navbar({sx}) {
+  const location = useLocation()
+
   const [toggle, setToggle] = useState(false);
+  const [navbarHeight, setNavbarHeight] = useState(0)
 
   const MenuArr = [
     {
@@ -32,6 +35,7 @@ export default function Navbar() {
       name: "Home",
       icon: <HomeOutlinedIcon />,
       submenu: [],
+      supportedParams: ['home']
     },
     {
       id: "students",
@@ -47,6 +51,7 @@ export default function Navbar() {
           name: "Reserve list",
         },
       ],
+      supportedParams: ['student-list', 'reserve-list', 'student-detail']
     },
     {
       id: "syllabus",
@@ -62,6 +67,7 @@ export default function Navbar() {
           name: "Create syllabus",
         },
       ],
+      supportedParams: ['view-syllabus', 'create-syllabus']
     },
     {
       id: "training-program",
@@ -77,6 +83,7 @@ export default function Navbar() {
           name: "Create program",
         },
       ],
+      supportedParams: ['view-program', 'create-program']
     },
     {
       id: "class",
@@ -92,12 +99,14 @@ export default function Navbar() {
           name: "Create class",
         },
       ],
+      supportedParams: ['view-class', 'create-class']
     },
     {
       id: "training-calendar",
       name: "Training calendar",
       icon: <CalendarTodayOutlinedIcon />,
       submenu: [],
+      supportedParams: ['training-calendar']
     },
     {
       id: "user-management",
@@ -113,6 +122,7 @@ export default function Navbar() {
           name: "User permission",
         },
       ],
+      supportedParams: ['user-list', 'user-permission']
     },
     {
       id: "learning-materials",
@@ -130,8 +140,30 @@ export default function Navbar() {
           name: "Calendar",
         },
       ],
+      supportedParams: ['calendar-settings']
     },
   ];
+
+  const getPath = () => {
+    const currentPath = location.pathname
+    const pathSegments = currentPath.split('/')
+    return pathSegments[1];
+  };
+
+  const getIdByPath = (path) => {
+    for (const menu of MenuArr) {
+      if (menu.supportedParams && menu.supportedParams.includes(path)) {
+        return menu.id;
+      }
+    }
+  }
+
+  const changeMenuHeight = () => {
+    let windowHeight = window.innerHeight
+    let halfWindowHeight = windowHeight - 135
+
+    setNavbarHeight(halfWindowHeight)
+  }
 
   const [menuList, setMenuList] = useState(MenuArr);
 
@@ -151,15 +183,22 @@ export default function Navbar() {
     menuList.forEach((menu) => {
       menu.expanded = false;
     });
+
+    changeMenuHeight()
+
+    window.addEventListener("resize", (e) => {
+      changeMenuHeight()
+    });
+
   }, []);
 
-  useEffect(() => {}, [menuList]);
+  useEffect(() => { }, [menuList]);
 
   const MenuButton = ({ menu }) => {
     return (
       <ListItemButton
         onClick={() => handleClickMenu(menu.id)}
-        className="navbar--menu-btn"
+        className={`navbar--menu-btn ${getIdByPath(getPath()) == menu.id && 'navbar--menu-btn-selected'}`}
       >
         <ListItemIcon
           className="navbar--menu-icon"
@@ -185,56 +224,57 @@ export default function Navbar() {
 
   return (
     <Box
-      sx={{
-        overflow: "auto",
-      }}
       id="navbar"
       className={`navbar--box ${!toggle ? "navbar--box-hidden" : ""}`}
+      sx={sx}
     >
       <List component="nav" aria-label="main mailbox folders">
-        <ListItemButton
-          className="navbar--menu-close"
-          onClick={handleToggleMenu}
-        >
-          <ListItemIcon>
-            {toggle ? <CloseIcon /> : <MenuOutlinedIcon />}
-          </ListItemIcon>
-        </ListItemButton>
-        {menuList.map((menu, i) => (
-          <>
-            {menu.submenu == null || menu.submenu.length == 0 ? (
-              <Link
-                key={i}
-                to={`/${menu.id}`}
-                style={{ textDecoration: "none", color: "#000" }}
-              >
+        <Box>
+          <ListItemButton
+            className="navbar--menu-close"
+            onClick={handleToggleMenu}
+          >
+            <ListItemIcon>
+              {toggle ? <CloseIcon /> : <MenuOutlinedIcon />}
+            </ListItemIcon>
+          </ListItemButton>
+        </Box>
+        <Box className='navbar--menu-items' sx={{maxHeight: `${navbarHeight}px`}}>
+          {menuList.map((menu) => (
+            <>
+              {menu.submenu == null || menu.submenu.length == 0 ? (
+                <Link
+                  to={`/${menu.id}`}
+                  style={{ textDecoration: "none", color: "#000" }}
+                >
+                  <MenuButton menu={menu}></MenuButton>
+                </Link>
+              ) : (
                 <MenuButton menu={menu}></MenuButton>
-              </Link>
-            ) : (
-              <MenuButton menu={menu}></MenuButton>
-            )}
+              )}
 
-            {toggle && (
-              <Collapse in={menu.expanded} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  {menu.submenu != null &&
-                    menu.submenu.length > 0 &&
-                    menu.submenu.map((submenu, i) => (
-                      <Link
-                        key={i}
-                        to={`/${submenu.id}`}
-                        style={{ textDecoration: "none", color: "#000" }}
-                      >
-                        <ListItemButton className="navbar--menu-sub-btn">
-                          <ListItemText primary={submenu.name} />
-                        </ListItemButton>
-                      </Link>
-                    ))}
-                </List>
-              </Collapse>
-            )}
-          </>
-        ))}
+              {toggle && (
+                <Collapse in={menu.expanded} timeout="auto" unmountOnExit className={`${getIdByPath(getPath()) == menu.id && 'navbar--menu-btn-selected'}`}>
+                  <List component="div" disablePadding>
+                    {menu.submenu != null &&
+                      menu.submenu.length > 0 &&
+                      menu.submenu.map((submenu) => (
+                        <Link
+                          to={`/${submenu.id}`}
+                          style={{ textDecoration: "none", color: "#000" }}
+                        >
+                          <ListItemButton className="navbar--menu-sub-btn">
+                            <ListItemText primary={submenu.name} />
+                          </ListItemButton>
+                        </Link>
+                      ))}
+                  </List>
+                </Collapse>
+              )}
+            </>
+          ))}
+        </Box>
+
       </List>
     </Box>
   );

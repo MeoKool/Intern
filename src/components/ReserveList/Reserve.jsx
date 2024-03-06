@@ -17,7 +17,15 @@ import {
   Button,
   Menu,
   MenuItem,
-} from "@mui/material";
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Alert 
+} from '@mui/material';
+
+import WarningIcon from '@mui/icons-material/Warning'; 
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -25,7 +33,6 @@ import PublishIcon from "@mui/icons-material/Publish";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
-import { Link } from "react-router-dom";
 import PanToolOutlinedIcon from "@mui/icons-material/PanToolOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
@@ -33,10 +40,12 @@ const Reserve = () => {
   const [users, setUsers] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [moreHorizAnchorEl, setMoreHorizAnchorEl] = useState(null);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [page, setPage] = React.useState(0);
-  const [searchTerm, setSearchTerm] = React.useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedOption, setSelectedOption] = useState("fullName");
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -47,14 +56,52 @@ const Reserve = () => {
     setPage(0);
   };
 
-  const handleMenuClick = (event) => {
+  const handleMenuClick = (event, user) => {
     setMoreHorizAnchorEl(event.currentTarget);
+    setSelectedUser(user);
   };
 
-  const handleMenuClose = () => {
+  const handleMenuClose = async (action) => {
     setMoreHorizAnchorEl(null);
+    
+    if (selectedUser) {
+      if (action === 'remove') {
+        setConfirmationOpen(true);
+      } else {
+        const updatedUsers = users.map(user => {
+          if (user.id === selectedUser.id) {
+            if (action === 'drop') {
+              user.status = "Drop out";
+            } 
+            axios.put(`https://6535e093c620ba9358ecba91.mockapi.io/Resrver/${selectedUser.id}`, user)
+              .then(response => {
+                console.log('Status updated successfully:', response.data);
+              })
+              .catch(error => {
+                console.error('Error updating status:', error);
+              });
+          }
+          return user;
+        });
+
+        setUsers(updatedUsers);
+      }
+    }
   };
 
+  const handleConfirmationClose = async (confirmed) => {
+    setConfirmationOpen(false);
+    if (confirmed) {
+      try {
+        await axios.delete(`https://6535e093c620ba9358ecba91.mockapi.io/Resrver/${selectedUser.id}`);
+        const updatedUsers = users.filter(user => user.id !== selectedUser.id);
+        setUsers(updatedUsers);
+      } catch (error) {
+        console.error('Error removing reserve:', error);
+      }
+    }
+  };
+  
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -354,32 +401,26 @@ const Reserve = () => {
                         {user.status}
                       </TableCell>
                       <TableCell align="center">
-                        <MoreHorizIcon onClick={handleMenuClick} />
+                        <MoreHorizIcon onClick={(event) => handleMenuClick(event, user)} />
                         <Menu
                           anchorEl={moreHorizAnchorEl}
                           open={Boolean(moreHorizAnchorEl)}
                           onClose={handleMenuClose}
                         >
-                          <MenuItem>
-                            <PanToolOutlinedIcon
-                              style={{ marginRight: "8px" }}
-                            />
+                          <MenuItem >
+                            <PanToolOutlinedIcon style={{ marginRight: "8px" }} />
                             Re-class
                           </MenuItem>
-                          <MenuItem component={Link} to="/score-management">
+                          <MenuItem >
                             <EmailOutlinedIcon style={{ marginRight: "8px" }} />
                             Remind
                           </MenuItem>
-                          <MenuItem>
-                            <StopCircleOutlinedIcon
-                              style={{ marginRight: "8px" }}
-                            />
+                          <MenuItem onClick={() => handleMenuClose('drop')}>
+                            <StopCircleOutlinedIcon style={{ marginRight: "8px" }} />
                             Drop class
                           </MenuItem>
-                          <MenuItem>
-                            <CancelOutlinedIcon
-                              style={{ marginRight: "8px" }}
-                            />
+                          <MenuItem onClick={() => handleMenuClose('remove')}>
+                            <CancelOutlinedIcon style={{ marginRight: "8px" }} />
                             Remove reserve
                           </MenuItem>
                         </Menu>
@@ -401,6 +442,31 @@ const Reserve = () => {
           </div>
         </Box>
       </Box>
+      <Dialog
+        open={confirmationOpen}
+        onClose={() => handleConfirmationClose(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle style={{ color: "blue" }}>
+        <Alert icon={<WarningIcon />} severity="error">
+          Remove Reserving
+       </Alert>
+        </DialogTitle>
+        <DialogContent>
+        <DialogContentText style={{color: "black"}} id="alert-dialog-description">
+        Do you really want to remove <br /> this student from the reserving list?
+        </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button style={{color: "red", textDecorationLine: 'underline'}} onClick={() => handleConfirmationClose(false)} color="primary">
+            Cancel
+          </Button>
+          <Button style={{backgroundColor: "#2d3748", color: "white"}} onClick={() => handleConfirmationClose(true)} color="primary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

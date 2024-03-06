@@ -24,7 +24,6 @@ import {
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ImportButton from "../../components/ImportButton/ImportButton";
 
 const ScoreManagement = () => {
   const [students, setStudents] = useState([]);
@@ -106,8 +105,72 @@ const ScoreManagement = () => {
     }
   };
 
-  const calculateStatus = (gpa) => {
-    return gpa >= 60 ? "PASSED" : "FAILED";
+  const calculateModuleScoreQuiz = (quizAVG) => {
+    const { quizHTML, quizCSS, quiz3, quiz4, quiz5, quiz6 } = quizAVG;
+    const sum = quizHTML + quizCSS + quiz3 + quiz4 + quiz5 + quiz6;
+    return sum / 6;
+  };
+
+  const calculateModuleScoreASM = (asmAVG) => {
+    const { Practice1, Practice2, Practice3 } = asmAVG;
+    const sum = Practice1 + Practice2 + Practice3;
+    return sum / 3;
+  };
+
+  const calculateFirstGPA = (firstGPA) => {
+    const { quizFinal, audit, PracticeFinal, Finalmodule1 } = firstGPA;
+    const sum = quizFinal + audit + PracticeFinal + Finalmodule1;
+    return sum / 4;
+  };
+
+  const calculateFirstGPAStatus = (firstGPA) => {
+    const { quizFinal, audit, PracticeFinal, Finalmodule1 } = firstGPA;
+    const sum = quizFinal + audit + PracticeFinal + Finalmodule1;
+    const average = sum / 4;
+    return average >= 5 ? "PASSED" : "FAILED";
+  };
+
+  const calculateFirstGPAtoGrade = (firstGPA) => {
+    const { quizFinal, audit, PracticeFinal, Finalmodule1 } = firstGPA;
+    const sum = quizFinal + audit + PracticeFinal + Finalmodule1;
+    const average = sum / 4;
+    if (average >= 9) {
+      return "A";
+    } else if (average >= 7) {
+      return "B";
+    } else if (average >= 5) {
+      return "C";
+    } else {
+      return "D";
+    }
+  };
+
+  const calculateSecondGPA = (secondGPA) => {
+    const { MOCK, Finalmodule2 } = secondGPA;
+    const sum = MOCK + Finalmodule2;
+    return sum / 2;
+  };
+
+  const calculateSecondGPAStatus = (secondGPA) => {
+    const { MOCK, Finalmodule2 } = secondGPA;
+    const sum = MOCK + Finalmodule2;
+    const average = sum / 2;
+    return average >= 5 ? "PASSED" : "FAILED";
+  };
+
+  const calculateSecondGPAtoGrade = (secondGPA) => {
+    const { MOCK, Finalmodule2 } = secondGPA;
+    const sum = MOCK + Finalmodule2;
+    const average = sum / 2;
+    if (average >= 9) {
+      return "A";
+    } else if (average >= 7) {
+      return "B";
+    } else if (average >= 5) {
+      return "C";
+    } else {
+      return "D";
+    }
   };
 
   const filteredStudents = students.filter((student) => {
@@ -126,10 +189,8 @@ const ScoreManagement = () => {
     (page + 1) * rowsPerPage
   );
 
-  console.log("Student object:", student);
-
   return (
-    <>
+    <div>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <h2
           style={{
@@ -147,10 +208,6 @@ const ScoreManagement = () => {
         >
           {student.className}
         </h2>
-
-        <Box>
-          <ImportButton />
-        </Box>
 
         <Box sx={{ display: "flex", flexGrow: 1, overflowX: "auto" }}>
           <TableContainer component={Paper} className="dashboard-container">
@@ -193,6 +250,19 @@ const ScoreManagement = () => {
                       fontFamily: "Arial, sans-serif",
                       color: "white",
                       whiteSpace: "nowrap",
+                      paddingLeft: "100px",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    ID
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
                     }}
                     align="center"
                     colSpan={1}
@@ -210,6 +280,18 @@ const ScoreManagement = () => {
                     colSpan={1}
                   >
                     Account
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "Arial, sans-serif",
+                      color: "white",
+                      whiteSpace: "nowrap",
+                    }}
+                    align="center"
+                    colSpan={1}
+                  >
+                    Email
                   </TableCell>
                   <TableCell style={{ borderRight: "2px solid red" }}>
                     {" "}
@@ -396,6 +478,8 @@ const ScoreManagement = () => {
                 <TableRow style={{ backgroundColor: "#536878" }}>
                   <TableCell> </TableCell>
                   <TableCell> </TableCell>
+                  <TableCell> </TableCell>
+                  <TableCell> </TableCell>
                   <TableCell style={{ borderRight: "2px solid red" }}>
                     {" "}
                   </TableCell>
@@ -461,11 +545,20 @@ const ScoreManagement = () => {
               <TableBody>
                 {slicedStudents.map((student) => (
                   <TableRow key={student.id}>
+                    <TableCell
+                      style={{ fontSize: "13px", paddingLeft: "100px" }}
+                      align="center"
+                    >
+                      {student.studentId}
+                    </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
-                      {student.fullName}
+                      {student.studentName}
                     </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
                       {student.account}
+                    </TableCell>
+                    <TableCell style={{ fontSize: "13px" }} align="center">
+                      {student.studentEmail}
                     </TableCell>
                     <TableCell
                       style={{ fontSize: "13px", borderRight: "2px solid red" }}
@@ -491,7 +584,7 @@ const ScoreManagement = () => {
                       {student.quiz6}
                     </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
-                      {student.avgQuiz}
+                      {calculateModuleScoreQuiz(student).toFixed(2)}
                     </TableCell>
                     <TableCell style={{ borderRight: "2px solid red" }}>
                       {" "}
@@ -506,7 +599,7 @@ const ScoreManagement = () => {
                       {student.Practice3}
                     </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
-                      {student.avgASM}
+                      {calculateModuleScoreASM(student).toFixed(2)}
                     </TableCell>
                     <TableCell style={{ borderRight: "2px solid red" }}>
                       {" "}
@@ -524,20 +617,21 @@ const ScoreManagement = () => {
                       {student.Finalmodule1}
                     </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
-                      {student.GPAModule1}
+                      {calculateFirstGPA(student).toFixed(2)}
                     </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
-                      {student.Levelmodule1}
+                      {calculateFirstGPAtoGrade(student)}
                     </TableCell>
                     <TableCell>
                       <Badge
+                        style={{ paddingLeft: "30px" }}
                         variant="filled"
                         color={
-                          calculateStatus(student.GPAModule1) === "PASSED"
+                          calculateFirstGPAStatus(student) === "PASSED"
                             ? "success"
                             : "error"
                         }
-                        badgeContent={calculateStatus(student.GPAModule1)}
+                        badgeContent={calculateFirstGPAStatus(student)}
                       />
                     </TableCell>
                     <TableCell style={{ borderRight: "2px solid red" }}>
@@ -550,20 +644,21 @@ const ScoreManagement = () => {
                       {student.Finalmodule2}
                     </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
-                      {student.GPAModule2}
+                      {calculateSecondGPA(student).toFixed(2)}
                     </TableCell>
                     <TableCell style={{ fontSize: "13px" }} align="center">
-                      {student.Levelmodule2}
+                      {calculateSecondGPAtoGrade(student)}
                     </TableCell>
                     <TableCell>
                       <Badge
+                        style={{ paddingLeft: "30px" }}
                         variant="filled"
                         color={
-                          calculateStatus(student.GPAModule2) === "PASSED"
+                          calculateSecondGPAStatus(student) === "PASSED"
                             ? "success"
                             : "error"
                         }
-                        badgeContent={calculateStatus(student.GPAModule2)}
+                        badgeContent={calculateSecondGPAStatus(student)}
                       />
                     </TableCell>
 
@@ -615,7 +710,7 @@ const ScoreManagement = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 };
 

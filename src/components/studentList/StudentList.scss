@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+@import '/src/sass/common.scss';
+
+.edit-button-disabled{
+    border: 1px solid #f3f2f2 !important;
+    border-radius: 10px;
+    color: gray;
+    background-color: white !important;
+    box-shadow: 0px 0px 3px 0px #999999 !important;
+    padding: 10px 25px !important;
+    margin-top: 10px !important;
+    float: right;
+    text-transform: none !important;
+}
+.edit-button{
+    border: 1px solid #f3f2f2 !important;
+    border-radius: 10px;
+    color: rgb(16, 27, 180) !important;
+    background-color: white !important;
+    box-shadow: 0px 0px 3px 0px #999999 !important;
+    padding: 10px 25px !important;
+    margin-top: 10px !important;
+    float: right;
+    text-transform: none !important;
+
+}
+.student-status-edit {
+
+    &--btn-action {
+        margin: 25px 0;
+        display: flex;
+        gap: 10px;
+        justify-content: end;
+
+        &-cancel {
+            color: #FF0000 !important;
+            text-decoration: underline !important;
+            text-transform: none !important;
+            font-size: 16px !important;
+        }
+
+        &-save {
+            @extend .btn-primary;
+            font-size: 16px !important;
+        }
+    }
+   &--title-update{
+        color: rgb(52, 56, 114) !important;
+    }
+
+    &--new-status-se {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem 0 !important; 
+
+    }
+
+    &--new-status-title {
+        font-weight: 600;
+        color: black !important;
+    }
+
+    &--new-status-select {
+        width: 10rem;
+        height: 2rem;
+
+    }
+
+    &--notification {
+        margin-top: 1rem!important; ;
+        color: black;
+    }
+}

@@ -4,6 +4,7 @@ import "./StudentDetails.css";
 
 import { Box, Grid, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
+import StudentScore from "../StudentScore/StudentScore";
 
 export default function StudentDetails() {
   const [user, setUser] = useState({});
@@ -344,7 +345,7 @@ export default function StudentDetails() {
       <Box>
         <Box className="student-details--label">Scores</Box>
         <Box>
-          <ScoreContainer />
+          <StudentScore />
         </Box>
       </Box>
     </>

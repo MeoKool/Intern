@@ -1,23 +1,29 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import StudentList from "./pages/studentList";
+import ClassList from "./pages/classList";
 import "./App.css";
 import MainPage from "./pages/MainPage/MainPage";
 import StudentDetails from "./components/student-details/StudentDetails";
 import StudentDetailsCommon from "./components/student-details/StudentDetailsCommon";
 import StudentDetailEditCommon from "./components/student-details/student-detail-edit/StudentDetailEdit";
-import ScoreManagement from "./pages/ScoreManagement/ScoreManagement";
+import ScoreManagement from "./pages/ScorePage";
 import ReserverList from "./pages/ReseverList";
 import ErrorPage from "./pages/ErrorPage";
+import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import ClassList from "./pages/classList";
 import ClassDetail from "./components/ClassDetail/ClassDetail";
 
-function App() {
+function RouteChangeTracker() {
+  const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [location.pathname]);
 
+  return null;
+}
+
+function App() {
   const createRoute = (path, page) => (
     <Route path={path} element={<MainPage page={page} />} />
   );
@@ -25,6 +31,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <RouteChangeTracker />
         <Routes>
           {createRoute("/", <ErrorPage />)}
           {createRoute("/home", <ErrorPage />)}
@@ -48,7 +55,10 @@ function App() {
           {createRoute("/view-program", <ErrorPage />)}
           {createRoute("/home", <ErrorPage />)}
           {createRoute("/class/:id", <ClassDetail />)}
-          {createRoute("/class/student-detail/:id", <StudentDetails />)}
+          {createRoute(
+            "/class/:classId/student-detail/:id",
+            <StudentDetails />
+          )}
           {createRoute("/student-detail/:id", <StudentDetailsCommon />)}
           {createRoute("/student-detail/:id/edit", <StudentDetailEditCommon />)}
         </Routes>

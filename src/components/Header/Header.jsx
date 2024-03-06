@@ -3,11 +3,11 @@ import "./Header.css";
 import FPTlogo from "./img/FPT_logo.png";
 import { Link } from "react-router-dom";
 
-export default function Header() {
+export default function Header({ height }) {
   // lấy token trên local storage
   const token = localStorage.getItem("token");
   return (
-    <header className="header">
+    <header className="header" style={{ height: height }}>
       <div className="content">
         <div className="navbar">
           <Link to="/">
@@ -19,9 +19,9 @@ export default function Header() {
             </a> */}
             {/* nếu token === null thì hiển thị sign in không có thì hiển thị avatar */}
             {token === null ? (
-              <a href="/login-register" className="btn action-btn">
+              <Link to="/login-register" className="btn action-btn">
                 Sign In
-              </a>
+              </Link>
             ) : (
               <div className="user-info">
                 <div className="avatar">

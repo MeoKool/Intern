@@ -1,0 +1,103 @@
+@import url("../../components/css/style.css");
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+}
+
+.score-container {
+  position: relative;
+  padding: 1rem;
+  margin-bottom: 20px;
+}
+
+.program-name {
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: 4px;
+}
+
+.class-name {
+  padding-top: 1rem;
+  font-weight: bold;
+  border-bottom: 2px solid black;
+}
+
+.module-container {
+  padding: 40px 0;
+}
+
+.module-name {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.module__status-badge {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  padding: 4px 1rem;
+  border-radius: 1rem;
+}
+
+.module__status-badge--success {
+  background-color: var(--color-success);
+  color: var(--color-info-light);
+}
+
+.module__status-badge--fail {
+  background-color: var(--color-danger);
+  color: var(--color-info-light);
+}
+
+.assignment-container {
+  background-color: #eee;
+  box-shadow: 0 2px 2px #333;
+  margin-top: 20px;
+  border-radius: 1rem;
+  width: fit-content;
+}
+
+.assignment-title {
+  background-color: var(--color-primary);
+  color: var(--color-info-light);
+  text-align: center;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  padding: 1rem 0;
+}
+
+.score-card {
+  display: flex;
+  text-align: center;
+}
+
+.assignment-name {
+  font-weight: 500;
+}
+
+.assignment-value {
+  font-weight: 900;
+  padding-top: 1.75rem;
+  font-size: 24px;
+}
+
+.divider {
+  background-color: var(--color-info-light);
+  width: 4px;
+}
+
+.score-item {
+  padding: 1rem;
+}
+
+.score-input {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  text-align: center;
+  font-weight: 900;
+  font-size: 24px;
+  vertical-align: center;
+}

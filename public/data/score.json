@@ -1,0 +1,58 @@
+{
+  "id": 0,
+  "fullName": "string",
+  "dob": "2024-02-29T08:54:07.859Z",
+  "gender": "string",
+  "phone": "string",
+  "email": "string",
+  "university": "string",
+  "major": "string",
+  "graduatedDate": 0,
+  "gpa": 0,
+  "address": "string",
+  "status": "string",
+  "reCer": "string",
+  "joinedDate": "2024-02-29T08:54:07.859Z",
+  "classCode": 0,
+  "currentClass": {
+    "id": 0,
+    "className": "HCM24_React_04",
+    "startDate": "2024-02-29T08:54:07.859Z",
+    "endDate": "2024-02-29T08:54:07.859Z",
+    "createdDate": "2024-02-29T08:54:07.859Z",
+    "createdUserId": 0,
+    "updatedDate": "2024-02-29T08:54:07.859Z",
+    "updatedUserId": 0,
+    "duration": "string",
+    "location": "string",
+    "status": "string",
+    "programId": 0,
+    "program": {
+      "id": 0,
+      "programName": "React for Fresher"
+    }
+  },
+  "studentClassModules": [
+    {
+      "id": 0,
+      "studentId": 0,
+      "moduleId": 0,
+      "classId": 0,
+      "moduleScore": 0,
+      "moduleLevel": "string",
+      "module": {
+        "id": 0,
+        "moduleName": "string",
+        "assignments": [
+          {
+            "id": 0,
+            "moduleId": 0,
+            "assignmentName": "string",
+            "assignmentType": "string",
+            "scoreValue": 0
+          }
+        ]
+      }
+    }
+  ]
+}

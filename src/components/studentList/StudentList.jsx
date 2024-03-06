@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import { Link } from "react-router-dom";
+import "./StudentList.scss";
+
 import {
   Box,
   Paper,
@@ -36,7 +38,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import AddUser from "./AddUser";
-import ImportButton from "../../components/ImportButton/ImportButton";
 
 const StudentList = () => {
   const [users, setUsers] = useState([]);
@@ -49,6 +50,14 @@ const StudentList = () => {
   const [selectedOption, setSelectedOption] = useState("fullName");
   const [deleteConfirmation, setDeleteConfirmation] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  //1 state lưu các giá trị status checkbox
+  const [selectedStatus, setSelectedStatus] = useState({});
+  //popup when different status
+  const [showDifferentStatusDialog, setShowDifferentStatusDialog] =
+    useState(false);
+  //pop-up when edit status
+  const [showEditStatusDialog, setShowEditStatusDialog] = useState(false);
+
   const handleButtonClick = () => {
     setShowForm(true);
   };
@@ -66,9 +75,25 @@ const StudentList = () => {
   };
 
   const handleCheck = (event) => {
-    setChecked({ ...checked, [event.target.name]: event.target.checked });
-  };
+    const studentId = event.target.name;
+    const isChecked = event.target.checked;
 
+    // Xóa phần tử khỏi selectedStatus nếu checkbox bị hủy chọn
+    if (!isChecked) {
+      const updatedStatus = { ...selectedStatus };
+      delete updatedStatus[studentId];
+      setSelectedStatus(updatedStatus);
+    } else {
+      setSelectedStatus((prevStatus) => ({
+        ...prevStatus,
+        [studentId]: users.find((user) => user.id === studentId)?.status || "",
+      }));
+    }
+
+    // Cập nhật checked state
+    setChecked({ ...checked, [studentId]: isChecked });
+  };
+  console.log(selectedStatus);
   const handleMenuClick = (event) => {
     setMoreHorizAnchorEl(event.currentTarget);
   };
@@ -106,6 +131,9 @@ const StudentList = () => {
 
   const closeDeleteConfirmation = () => {
     setDeleteConfirmation(null);
+  };
+  const cancelDialogEditStatus = () => {
+    setShowEditStatusDialog(false);
   };
 
   const handleDelete = async () => {
@@ -174,6 +202,30 @@ const StudentList = () => {
     page * rowsPerPage,
     (page + 1) * rowsPerPage
   );
+
+  const updateStatus = () => {
+    const selectedCount = Object.values(checked).filter(
+      (value) => value
+    ).length;
+
+    if (selectedCount > 0) {
+      const uniqueStatuses = [...new Set(Object.values(selectedStatus))];
+
+      if (uniqueStatuses.length === 1) {
+        // Open the edit status dialog
+        setShowEditStatusDialog(true);
+      } else {
+        // Hiển thị Dialog thông báo lỗi
+        setShowDifferentStatusDialog(true);
+      }
+    } else {
+      // Hiển thị Dialog thông báo nếu không có sinh viên nào được chọn
+      alert("Vui lòng chọn ít nhất một sinh viên để chỉnh sửa trạng thái");
+    }
+  };
+  const disableEditButton = Object.values(checked).filter(
+    (value) => value
+  ).length;
 
   return (
     <>
@@ -348,7 +400,7 @@ const StudentList = () => {
                       }}
                       align="center"
                     >
-                      RECer
+                      STATUS
                     </TableCell>
                     <TableCell
                       style={{
@@ -374,9 +426,7 @@ const StudentList = () => {
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
                         <Link
-                          style={{
-                            color: "black",
-                          }}
+                          style={{ color: "black" }}
                           to={`/student-detail/${user.id}`}
                         >
                           {user.fullName}
@@ -395,7 +445,7 @@ const StudentList = () => {
                         {user.gpa}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.reCer}
+                        {user.status}
                       </TableCell>
                       <TableCell align="center">
                         <MoreHorizIcon onClick={handleMenuClick} />
@@ -410,13 +460,6 @@ const StudentList = () => {
                           >
                             <EditIcon style={{ marginRight: "8px" }} />
                             Edit Student
-                          </MenuItem>
-
-                          <MenuItem component={Link} to="/score-management">
-                            <ImportContactsIcon
-                              style={{ marginRight: "8px" }}
-                            />
-                            Score Management
                           </MenuItem>
                           <MenuItem
                             onClick={() => openDeleteConfirmation(user.id)}
@@ -440,9 +483,85 @@ const StudentList = () => {
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
             </TableContainer>
+            {disableEditButton === 0 ? (
+              <Button
+                className="edit-button-disabled"
+                variant="contained"
+                onClick={updateStatus}
+                disabled={disableEditButton === 0}
+              >
+                ✎ Update status student
+              </Button>
+            ) : (
+              <Button
+                className="edit-button"
+                variant="contained"
+                style={{ float: "right" }}
+                onClick={updateStatus}
+              >
+                ✎ Update status student
+              </Button>
+            )}
           </div>
         </Box>
       </Box>
+      {/* Dialog for Edit status when same states */}
+      <Dialog
+        style={{ padding: "3rem" }}
+        open={Boolean(showEditStatusDialog)}
+        onClose={() => setShowEditStatusDialog(false)}
+      >
+        <DialogTitle className="student-status-edit--title-update">
+          Update Status
+        </DialogTitle>
+
+        <DialogContent>
+          <hr />
+          <DialogContentText className="student-status-edit--notification">
+            Are you to update status {Object.keys(selectedStatus).length}{" "}
+            students?
+          </DialogContentText>
+
+          <DialogContent className="student-status-edit--new-status-se">
+            <DialogContentText className="student-status-edit--new-status-title">
+              New Status:
+            </DialogContentText>
+            <Select className="student-status-edit--new-status-select">
+              <MenuItem value={"Inactive"}>Inactive</MenuItem>
+              <MenuItem value={"Off"}>Off</MenuItem>
+              <MenuItem value={"Keep-Class"}>Keep Class</MenuItem>
+            </Select>
+          </DialogContent>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            style={{ color: "red" }}
+            onClick={cancelDialogEditStatus}
+            className="student-status-edit--btn-action-cancel"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={cancelDialogEditStatus}
+            className="student-status-edit--btn-action-save"
+          >
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Dialog for Edit status when different states */}
+      <Dialog
+        open={showDifferentStatusDialog}
+        onClose={() => setShowDifferentStatusDialog(false)}
+      >
+        <DialogTitle>Different Status</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please select students with the same attending status.
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Confirmation Dialog */}
       <Dialog

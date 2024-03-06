@@ -3,15 +3,17 @@ import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import { Box, Grid } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 
 const MainPage = ({ page }) => {
-  const [gridCol, setGridCol] = useState("0.1fr 1fr");
+
+  const navbarHeight = 80
+
+  const [navbarWidth, setNavbarWidth] = useState(0)
+  const [pageHeight, setPageHeight] = useState(0);
 
   const changeWidth = (width) => {
-    const totalWidthInPixels = window.innerWidth;
-    const pixels = width;
-    const frValue = pixels / totalWidthInPixels;
-    setGridCol(`${frValue}fr ${1 - frValue}fr`);
+    setNavbarWidth(width)
   };
 
   useEffect(() => {
@@ -21,25 +23,36 @@ const MainPage = ({ page }) => {
       changeWidth(navbarDiv.clientWidth);
     });
 
-    resizeObserver.observe(navbarDiv);
+    window.addEventListener("resize", (e) => {
+      changeWidth(navbarDiv.clientWidth);
+    });
+
+    resizeObserver.observe(navbarDiv)
+
+    const totalHeightInPixels = window.innerHeight
+    setPageHeight(totalHeightInPixels - navbarHeight)
   }, []);
 
   return (
     <>
-      {gridCol && (
+      {(
         <>
-          <Header />
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: `${gridCol}`,
-            }}
-          >
+          <Header height={navbarHeight} />
+          <div>
             <Box>
-              <Navbar />
+              <Navbar sx={{ marginTop: `${navbarHeight}px` }} />
             </Box>
-            <Box sx={{ marginTop: "80px", marginBottom: "20px" }}>
-              {page}
+            <Box sx={{
+              marginLeft: `${navbarWidth}px`,
+              marginTop: `${navbarHeight}px`,
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: pageHeight,
+              justifyContent: 'space-between',
+            }}>
+              <Box sx={{ overflowX: 'auto' }}>
+                {page}
+              </Box>
               <Footer />
             </Box>
           </div>
