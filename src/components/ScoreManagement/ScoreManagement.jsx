@@ -232,8 +232,12 @@ const ScoreManagement = () => {
                     width: "150px",
                   }}
                 >
-                  <MenuItem value={"fullName"}>Full Name</MenuItem>
-                  <MenuItem value={"account"}>Account</MenuItem>
+                  <MenuItem sx={{ width: "100%" }} value={"fullName"}>
+                    Full Name
+                  </MenuItem>
+                  <MenuItem sx={{ width: "100%" }} value={"account"}>
+                    Account
+                  </MenuItem>
                 </Select>
               </Popover>
             </div>
@@ -669,11 +673,13 @@ const ScoreManagement = () => {
                         open={Boolean(moreHorizAnchorEl)}
                         onClose={handleMenuClose}
                       >
-                        <MenuItem>
+                        <MenuItem sx={{ width: "100%" }}>
                           <DeleteForeverIcon style={{ marginRight: "8px" }} />
                           Delete Score
                         </MenuItem>
-                        <MenuItem>Final Studying Result</MenuItem>
+                        <MenuItem sx={{ width: "100%" }}>
+                          Final Studying Result
+                        </MenuItem>
                       </Menu>
                     </TableCell>
                   </TableRow>

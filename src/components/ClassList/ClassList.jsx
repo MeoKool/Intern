@@ -246,6 +246,7 @@ const ClassList = () => {
                           onClose={() => handleMenuClose(user.Id)}
                         >
                           <MenuItem
+                            sx={{ width: "100%" }}
                             component={Link}
                             to={{
                               pathname: `/class/${user.Id}`,

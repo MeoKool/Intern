@@ -298,11 +298,17 @@ const StudentList = () => {
                       width: "150px",
                     }}
                   >
-                    <MenuItem value={"id"}>ID</MenuItem>
+                    <MenuItem sx={{ width: "100%" }} value={"id"}>
+                      ID
+                    </MenuItem>
 
-                    <MenuItem value={"fullName"}>Full Name</MenuItem>
+                    <MenuItem sx={{ width: "100%" }} value={"fullName"}>
+                      Full Name
+                    </MenuItem>
 
-                    <MenuItem value={"Email"}>Email</MenuItem>
+                    <MenuItem sx={{ width: "100%" }} value={"Email"}>
+                      Email
+                    </MenuItem>
                   </Select>
                 </Popover>
                 <Button
@@ -455,6 +461,7 @@ const StudentList = () => {
                           onClose={handleMenuClose}
                         >
                           <MenuItem
+                            sx={{ width: "100%" }}
                             component={Link}
                             to={`/student-detail/${user.id}/edit`}
                           >
@@ -462,6 +469,7 @@ const StudentList = () => {
                             Edit Student
                           </MenuItem>
                           <MenuItem
+                            sx={{ width: "100%" }}
                             onClick={() => openDeleteConfirmation(user.id)}
                           >
                             <DeleteForeverIcon style={{ marginRight: "8px" }} />
@@ -527,9 +535,15 @@ const StudentList = () => {
               New Status:
             </DialogContentText>
             <Select className="student-status-edit--new-status-select">
-              <MenuItem value={"Inactive"}>Inactive</MenuItem>
-              <MenuItem value={"Off"}>Off</MenuItem>
-              <MenuItem value={"Keep-Class"}>Keep Class</MenuItem>
+              <MenuItem sx={{ width: "100%" }} value={"Inactive"}>
+                Inactive
+              </MenuItem>
+              <MenuItem sx={{ width: "100%" }} value={"Off"}>
+                Off
+              </MenuItem>
+              <MenuItem sx={{ width: "100%" }} value={"Keep-Class"}>
+                Keep Class
+              </MenuItem>
             </Select>
           </DialogContent>
         </DialogContent>

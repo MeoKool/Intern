@@ -22,10 +22,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Alert 
-} from '@mui/material';
+  Alert,
+} from "@mui/material";
 
-import WarningIcon from '@mui/icons-material/Warning'; 
+import WarningIcon from "@mui/icons-material/Warning";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -63,22 +63,26 @@ const Reserve = () => {
 
   const handleMenuClose = async (action) => {
     setMoreHorizAnchorEl(null);
-    
+
     if (selectedUser) {
-      if (action === 'remove') {
+      if (action === "remove") {
         setConfirmationOpen(true);
       } else {
-        const updatedUsers = users.map(user => {
+        const updatedUsers = users.map((user) => {
           if (user.id === selectedUser.id) {
-            if (action === 'drop') {
+            if (action === "drop") {
               user.status = "Drop out";
-            } 
-            axios.put(`https://6535e093c620ba9358ecba91.mockapi.io/Resrver/${selectedUser.id}`, user)
-              .then(response => {
-                console.log('Status updated successfully:', response.data);
+            }
+            axios
+              .put(
+                `https://6535e093c620ba9358ecba91.mockapi.io/Resrver/${selectedUser.id}`,
+                user
+              )
+              .then((response) => {
+                console.log("Status updated successfully:", response.data);
               })
-              .catch(error => {
-                console.error('Error updating status:', error);
+              .catch((error) => {
+                console.error("Error updating status:", error);
               });
           }
           return user;
@@ -93,15 +97,19 @@ const Reserve = () => {
     setConfirmationOpen(false);
     if (confirmed) {
       try {
-        await axios.delete(`https://6535e093c620ba9358ecba91.mockapi.io/Resrver/${selectedUser.id}`);
-        const updatedUsers = users.filter(user => user.id !== selectedUser.id);
+        await axios.delete(
+          `https://6535e093c620ba9358ecba91.mockapi.io/Resrver/${selectedUser.id}`
+        );
+        const updatedUsers = users.filter(
+          (user) => user.id !== selectedUser.id
+        );
         setUsers(updatedUsers);
       } catch (error) {
-        console.error('Error removing reserve:', error);
+        console.error("Error removing reserve:", error);
       }
     }
   };
-  
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -213,9 +221,15 @@ const Reserve = () => {
                       width: "150px",
                     }}
                   >
-                    <MenuItem value={"studentId"}>Student code</MenuItem>
-                    <MenuItem value={"fullName"}>Full Name</MenuItem>
-                    <MenuItem value={"Email"}>Email</MenuItem>
+                    <MenuItem sx={{ width: "100%" }} value={"studentId"}>
+                      Student code
+                    </MenuItem>
+                    <MenuItem sx={{ width: "100%" }} value={"fullName"}>
+                      Full Name
+                    </MenuItem>
+                    <MenuItem sx={{ width: "100%" }} value={"Email"}>
+                      Email
+                    </MenuItem>
                   </Select>
                 </Popover>
                 <Button
@@ -401,26 +415,40 @@ const Reserve = () => {
                         {user.status}
                       </TableCell>
                       <TableCell align="center">
-                        <MoreHorizIcon onClick={(event) => handleMenuClick(event, user)} />
+                        <MoreHorizIcon
+                          onClick={(event) => handleMenuClick(event, user)}
+                        />
                         <Menu
                           anchorEl={moreHorizAnchorEl}
                           open={Boolean(moreHorizAnchorEl)}
                           onClose={handleMenuClose}
                         >
-                          <MenuItem >
-                            <PanToolOutlinedIcon style={{ marginRight: "8px" }} />
+                          <MenuItem sx={{ width: "100%" }}>
+                            <PanToolOutlinedIcon
+                              style={{ marginRight: "8px" }}
+                            />
                             Re-class
                           </MenuItem>
-                          <MenuItem >
+                          <MenuItem sx={{ width: "100%" }}>
                             <EmailOutlinedIcon style={{ marginRight: "8px" }} />
                             Remind
                           </MenuItem>
-                          <MenuItem onClick={() => handleMenuClose('drop')}>
-                            <StopCircleOutlinedIcon style={{ marginRight: "8px" }} />
+                          <MenuItem
+                            sx={{ width: "100%" }}
+                            onClick={() => handleMenuClose("drop")}
+                          >
+                            <StopCircleOutlinedIcon
+                              style={{ marginRight: "8px" }}
+                            />
                             Drop class
                           </MenuItem>
-                          <MenuItem onClick={() => handleMenuClose('remove')}>
-                            <CancelOutlinedIcon style={{ marginRight: "8px" }} />
+                          <MenuItem
+                            sx={{ width: "100%" }}
+                            onClick={() => handleMenuClose("remove")}
+                          >
+                            <CancelOutlinedIcon
+                              style={{ marginRight: "8px" }}
+                            />
                             Remove reserve
                           </MenuItem>
                         </Menu>
@@ -449,20 +477,33 @@ const Reserve = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle style={{ color: "blue" }}>
-        <Alert icon={<WarningIcon />} severity="error">
-          Remove Reserving
-       </Alert>
+          <Alert icon={<WarningIcon />} severity="error">
+            Remove Reserving
+          </Alert>
         </DialogTitle>
         <DialogContent>
-        <DialogContentText style={{color: "black"}} id="alert-dialog-description">
-        Do you really want to remove <br /> this student from the reserving list?
-        </DialogContentText>
+          <DialogContentText
+            style={{ color: "black" }}
+            id="alert-dialog-description"
+          >
+            Do you really want to remove <br /> this student from the reserving
+            list?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button style={{color: "red", textDecorationLine: 'underline'}} onClick={() => handleConfirmationClose(false)} color="primary">
+          <Button
+            style={{ color: "red", textDecorationLine: "underline" }}
+            onClick={() => handleConfirmationClose(false)}
+            color="primary"
+          >
             Cancel
           </Button>
-          <Button style={{backgroundColor: "#2d3748", color: "white"}} onClick={() => handleConfirmationClose(true)} color="primary" autoFocus>
+          <Button
+            style={{ backgroundColor: "#2d3748", color: "white" }}
+            onClick={() => handleConfirmationClose(true)}
+            color="primary"
+            autoFocus
+          >
             Delete
           </Button>
         </DialogActions>
