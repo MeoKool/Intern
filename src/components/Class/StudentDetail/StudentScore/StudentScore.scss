@@ -1,0 +1,101 @@
+@import '../../../../sass/common.scss';
+
+.student-detail-score {
+  position: relative;
+  padding: 15px 2vw;
+  margin-bottom: 20px;
+
+  .program-name {
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 4px;
+  }
+
+  .class-name {
+    padding-top: 1rem;
+    font-weight: bold;
+    border-bottom: 2px solid black;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .node-container {
+    padding: 40px 0;
+  }
+
+  .title-name {
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .status-badge {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 4px 1rem;
+    border-radius: 1rem;
+    color: $color-white;
+
+    &--success {
+      background-color: $color-green;
+    }
+
+    &--fail {
+      background-color: $color-danger;
+    }
+  }
+
+  .assignment-container {
+    background-color: #eee;
+    box-shadow: 0 2px 2px #333;
+    margin-top: 20px;
+    border-radius: 1rem;
+    width: fit-content;
+  }
+
+  .assignment {
+    &-title {
+      text-align: center;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      padding: 1rem 0;
+      background-color: $color-primary;
+      color: $color-white;
+      width: 100%;
+    }
+
+    &-score-card {
+      display: flex;
+      text-align: center;
+      position: relative;
+    }
+
+    &-name {
+      font-weight: 500;
+    }
+
+    &-value {
+      font-weight: 900;
+      padding-top: 1.75rem;
+      font-size: 24px;
+    }
+  }
+
+  .score-item {
+    padding: 1rem;
+  }
+
+  .score-input {
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    text-align: center;
+    font-weight: 900;
+    font-size: 24px;
+    vertical-align: center;
+  }
+
+}

@@ -1,0 +1,77 @@
+@import '../../../../sass/common.scss';
+
+.send-preview-reserve-mail--dialog {
+
+    .title {
+        background-color: $color-primary;
+        color: #FFFFFF;
+        width: 100%;
+        font-size: 16px;
+        text-align: center;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn {
+        &-close {
+            position: absolute;
+            z-index: 3;
+            right: 20px;
+            bottom: 8%;
+            cursor: pointer;
+        }
+
+        &-action {
+            display: flex;
+            justify-content: center;
+
+            .preview {
+                border: 1px solid $color-black;
+                border-radius: 8px;
+                padding: 2px 0;
+                width: 100px;
+                text-transform: none;
+                color: $color-black;
+            }
+
+            .send {
+                border: 1px solid #808692;
+                border-radius: 8px;
+                padding: 2px 0;
+                width: 100px;
+                text-transform: none;
+                background-color: $color-primary;
+                color: $color-white;
+            }
+        }
+    }
+
+    .content {
+        min-width: 100%;
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
+    .field {
+        display: grid;
+        grid-template-columns: 0.3fr 0.7fr;
+        margin-bottom: 10px;
+        align-items: center;
+
+        &-title {
+            font-weight: 600;
+        }
+
+        &-template-menu {
+            .MuiSelect-select {
+                padding: 4px 10px !important;
+            }
+        }
+    }
+
+    p {
+        margin-bottom: 10px;
+    }
+}

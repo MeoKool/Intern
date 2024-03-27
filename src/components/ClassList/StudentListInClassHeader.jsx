@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Box } from "@mui/material";
+import { GetClassById } from "../../api/APIConfigure";
 
-export default function StudentListInClassHeader() {
+export default function StudentListInClassHeader({ id }) {
   const [classData, setClassData] = useState({});
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchClassData();
@@ -12,15 +13,16 @@ export default function StudentListInClassHeader() {
 
   const fetchClassData = async () => {
     try {
-      const response = await axios.get(
-        "https://65b9c15fb71048505a8b1ebb.mockapi.io/class"
-      );
-      const firstClass = response.data[0];
+      const response = await GetClassById(id);
+      const firstClass = response.data;
       setClassData(firstClass);
+      setLoading(false);
     } catch (error) {
       console.log("Fetching class data failed!");
     }
   };
+
+  if (isLoading) return <></>;
 
   return (
     <>
@@ -29,12 +31,12 @@ export default function StudentListInClassHeader() {
         style={{
           fontSize: "26px",
           marginBottom: "30px",
-
-          fontFamily: "Arial, sans-serif",
+          marginTop: "1px",
+          fontFamily: "Inter, sans-serif",
           backgroundColor: "#2d3748",
           fontWeight: "bold",
           color: "white",
-          padding: "50px",
+          padding: "40px 0 40px 20px",
         }}
       >
         <h1 style={{ fontSize: "20px" }}>Class</h1>
@@ -46,9 +48,9 @@ export default function StudentListInClassHeader() {
           }}
         >
           <Box>
-            <h2>{classData.class}</h2>
+            <h2>{classData.program.programName}</h2>
             <h3 style={{ fontSize: "20px", position: "relative" }}>
-              {classData.class_code}
+              {classData.className}
               <span
                 style={{
                   position: "absolute",
@@ -60,18 +62,8 @@ export default function StudentListInClassHeader() {
               ></span>
             </h3>
             <h4 style={{ fontSize: "18px", color: "white", marginTop: "25px" }}>
-              31 Days (97 Hours)
+              {classData.duration}
             </h4>
-          </Box>
-          <Box>
-            <MoreHorizIcon
-              style={{
-                color: "white",
-                position: "absolute",
-                top: "160px",
-                fontSize: "30px",
-              }}
-            />
           </Box>
         </Box>
       </div>

@@ -1,0 +1,64 @@
+* {
+  font-family: "Inter";
+  user-select: none;
+}
+
+.box-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.input-value {
+  font-size: 16px;
+  margin-top: 8px;
+  margin-bottom: 1.5rem;
+  padding: 8px 0px;
+  text-indent: 16px;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  background-color: #edf2f7;
+  min-height: 36px;
+  width: 100%;
+}
+
+.input-user {
+  background-color: #fff;
+  border: 1px solid black;
+}
+
+.input-date {
+  width: 47%;
+  text-indent: 8px;
+}
+
+.divider {
+  width: 100%;
+  display: block;
+  height: 1px;
+  color: black;
+  background-color: black;
+  margin-bottom: 1.5rem;
+}
+
+.checkbox-container {
+  padding: 0.5rem 0rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.find-student {
+  background: #2d3748;
+  color: #fff;
+  padding: 4px 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.find-student:hover {
+  opacity: 0.8;
+}

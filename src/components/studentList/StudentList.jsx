@@ -38,6 +38,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import AddUser from "./AddUser";
+import { GetAllStudent } from "../../api/APIConfigure";
 
 const StudentList = () => {
   const [users, setUsers] = useState([]);
@@ -93,7 +94,6 @@ const StudentList = () => {
     // Cập nhật checked state
     setChecked({ ...checked, [studentId]: isChecked });
   };
-  console.log(selectedStatus);
   const handleMenuClick = (event) => {
     setMoreHorizAnchorEl(event.currentTarget);
   };
@@ -108,10 +108,11 @@ const StudentList = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(
-        "https://6535e093c620ba9358ecba91.mockapi.io/student"
+      const response = await GetAllStudent(100);
+      const responseUser = await GetAllStudent(response.data.totalCount);
+      setUsers(
+        Array.isArray(responseUser.data.items) ? responseUser.data.items : []
       );
-      setUsers(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
       setUsers([]);
     }
@@ -187,12 +188,12 @@ const StudentList = () => {
   };
 
   const filteredStatus = users.filter((user) => {
-    if (
-      searchTerm &&
-      user[selectedOption] &&
-      !user[selectedOption].toLowerCase().includes(searchTerm.toLowerCase())
-    ) {
-      return false;
+    if (searchTerm && user[selectedOption]) {
+      const userValue =
+        typeof user[selectedOption] === "string"
+          ? user[selectedOption].toLowerCase()
+          : user[selectedOption].toString();
+      return userValue.includes(searchTerm.toString().toLowerCase());
     }
 
     return true;
@@ -233,7 +234,6 @@ const StudentList = () => {
         style={{
           fontSize: "30px",
           marginBottom: "20px",
-          fontFamily: "Arial, sans-serif",
           fontWeight: "bold",
           backgroundColor: "#2d3748",
           color: "white",
@@ -298,17 +298,11 @@ const StudentList = () => {
                       width: "150px",
                     }}
                   >
-                    <MenuItem sx={{ width: "100%" }} value={"id"}>
-                      ID
-                    </MenuItem>
+                    <MenuItem value={"id"}>ID</MenuItem>
 
-                    <MenuItem sx={{ width: "100%" }} value={"fullName"}>
-                      Full Name
-                    </MenuItem>
+                    <MenuItem value={"fullName"}>Full Name</MenuItem>
 
-                    <MenuItem sx={{ width: "100%" }} value={"Email"}>
-                      Email
-                    </MenuItem>
+                    <MenuItem value={"email"}>Email</MenuItem>
                   </Select>
                 </Popover>
                 <Button
@@ -351,7 +345,6 @@ const StudentList = () => {
                     <TableCell
                       style={{
                         fontSize: "20px",
-                        fontFamily: "Arial, sans-serif",
                         color: "white",
                       }}
                       align="center"
@@ -361,7 +354,6 @@ const StudentList = () => {
                     <TableCell
                       style={{
                         fontSize: "20px",
-                        fontFamily: "Arial, sans-serif",
                         color: "white",
                       }}
                       align="center"
@@ -371,7 +363,6 @@ const StudentList = () => {
                     <TableCell
                       style={{
                         fontSize: "20px",
-                        fontFamily: "Arial, sans-serif",
                         color: "white",
                       }}
                       align="center"
@@ -381,7 +372,6 @@ const StudentList = () => {
                     <TableCell
                       style={{
                         fontSize: "20px",
-                        fontFamily: "Arial, sans-serif",
                         color: "white",
                       }}
                       align="center"
@@ -391,7 +381,6 @@ const StudentList = () => {
                     <TableCell
                       style={{
                         fontSize: "20px",
-                        fontFamily: "Arial, sans-serif",
                         color: "white",
                       }}
                       align="center"
@@ -401,17 +390,15 @@ const StudentList = () => {
                     <TableCell
                       style={{
                         fontSize: "20px",
-                        fontFamily: "Arial, sans-serif",
                         color: "white",
                       }}
                       align="center"
                     >
-                      STATUS
+                      RECer
                     </TableCell>
                     <TableCell
                       style={{
                         fontSize: "20px",
-                        fontFamily: "Arial, sans-serif",
                         color: "white",
                       }}
                       align="center"
@@ -439,19 +426,19 @@ const StudentList = () => {
                         </Link>
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.dateOfBirth}
+                        {new Date(user.dob).toLocaleDateString()}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.Email}
+                        {user.email}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.Phone}
+                        {user.phone}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
                         {user.gpa}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.status}
+                        {user.reCer}
                       </TableCell>
                       <TableCell align="center">
                         <MoreHorizIcon onClick={handleMenuClick} />
@@ -461,7 +448,6 @@ const StudentList = () => {
                           onClose={handleMenuClose}
                         >
                           <MenuItem
-                            sx={{ width: "100%" }}
                             component={Link}
                             to={`/student-detail/${user.id}/edit`}
                           >
@@ -469,7 +455,6 @@ const StudentList = () => {
                             Edit Student
                           </MenuItem>
                           <MenuItem
-                            sx={{ width: "100%" }}
                             onClick={() => openDeleteConfirmation(user.id)}
                           >
                             <DeleteForeverIcon style={{ marginRight: "8px" }} />
@@ -535,15 +520,9 @@ const StudentList = () => {
               New Status:
             </DialogContentText>
             <Select className="student-status-edit--new-status-select">
-              <MenuItem sx={{ width: "100%" }} value={"Inactive"}>
-                Inactive
-              </MenuItem>
-              <MenuItem sx={{ width: "100%" }} value={"Off"}>
-                Off
-              </MenuItem>
-              <MenuItem sx={{ width: "100%" }} value={"Keep-Class"}>
-                Keep Class
-              </MenuItem>
+              <MenuItem value={"Inactive"}>Inactive</MenuItem>
+              <MenuItem value={"Off"}>Off</MenuItem>
+              <MenuItem value={"Keep-Class"}>Keep Class</MenuItem>
             </Select>
           </DialogContent>
         </DialogContent>

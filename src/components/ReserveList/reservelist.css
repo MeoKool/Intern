@@ -1,0 +1,21 @@
+.remind-form{
+    width: 100%;
+    display: flex;
+}
+.remid-form-items{
+    width: 25%;
+    margin: 0.8rem;
+}
+.remind-form-items2{
+    width: 100%;
+    margin: 0.8rem;
+}
+.dialog-action{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+.dialog-action button{
+    margin: 0 0 0 1rem;
+}

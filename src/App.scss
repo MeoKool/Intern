@@ -1,0 +1,29 @@
+@import './sass/common.scss';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.prop {
+    &-scroll-to-top {
+        position: fixed !important;
+        bottom: 25px;
+        right: 25px;
+        width: 50px !important;
+        height: 50px !important;
+        z-index: 1000;
+        background-color: $color-orange !important;
+        color: $color-white !important;
+
+        &-icon {
+            width: 40px !important;
+            height: 40px !important;
+        }
+    }
+}

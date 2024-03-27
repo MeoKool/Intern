@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import { Link, useParams } from "react-router-dom";
@@ -34,9 +34,12 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ImportContactsIcon from "@mui/icons-material/ImportContacts";
 import AddUser from "./AddUser";
 import ImportButton from "../ImportButton/ImportButton";
+import SendEmailButton from "./SendEmailButton";
+import { GetAllStudentInClass, ImportStudent } from "../../api/APIConfigure";
+import { BASE_URL } from "../../api/axios";
+import AttendingStatus from "../AttendingStatus/AttendingStatus";
 
 const StudentListInClass = () => {
   const { id } = useParams();
@@ -84,10 +87,15 @@ const StudentListInClass = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(
-        "https://6535e093c620ba9358ecba91.mockapi.io/student"
+      const response = await GetAllStudentInClass(id);
+      setUsers(
+        response.data.studentClasses.map((item) => {
+          return {
+            ...item.student,
+            attendingStatus: item.attendingStatus,
+          };
+        })
       );
-      setUsers(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
       setUsers([]);
     }
@@ -127,9 +135,9 @@ const StudentListInClass = () => {
     const dataToExport = selectedRows.map((user) => ({
       id: user.id,
       "Full name": user.fullName,
-      "Date of birth": user.dateOfBirth,
-      Email: user.Email,
-      Phone: user.Phone,
+      "Date of birth": user.dob,
+      Email: user.email,
+      Phone: user.phone,
       GPA: user.gpa,
       RECer: user.reCer,
       address: user.address,
@@ -247,17 +255,11 @@ const StudentListInClass = () => {
                       width: "150px",
                     }}
                   >
-                    <MenuItem sx={{ width: "100%" }} value={"id"}>
-                      ID
-                    </MenuItem>
+                    <MenuItem value={"id"}>ID</MenuItem>
 
-                    <MenuItem sx={{ width: "100%" }} value={"fullName"}>
-                      Full Name
-                    </MenuItem>
+                    <MenuItem value={"fullName"}>Full Name</MenuItem>
 
-                    <MenuItem sx={{ width: "100%" }} value={"Email"}>
-                      Email
-                    </MenuItem>
+                    <MenuItem value={"Email"}>Email</MenuItem>
                   </Select>
                 </Popover>
                 <Button
@@ -288,7 +290,14 @@ const StudentListInClass = () => {
                   <DownloadIcon />
                   Export
                 </Button>
-                <ImportButton />
+                <ImportButton
+                  file={`${BASE_URL}api/file/student-template`}
+                  postFile={ImportStudent}
+                  idObj={{
+                    classId: id,
+                  }}
+                />
+                <SendEmailButton />
               </div>
               <Table
                 sx={{ minWidth: 650 }}
@@ -356,6 +365,16 @@ const StudentListInClass = () => {
                       }}
                       align="center"
                     >
+                      Status
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        fontSize: "20px",
+                        fontFamily: "Arial, sans-serif",
+                        color: "white",
+                      }}
+                      align="center"
+                    >
                       RECer
                     </TableCell>
                     <TableCell
@@ -391,16 +410,19 @@ const StudentListInClass = () => {
                         </Link>
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.dateOfBirth}
+                        {user.dob}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.Email}
+                        {user.email}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.Phone}
+                        {user.phone}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
                         {user.gpa}
+                      </TableCell>
+                      <TableCell style={{ fontSize: "13px" }} align="center">
+                        <AttendingStatus status={user.attendingStatus} />
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
                         {user.reCer}
@@ -413,26 +435,13 @@ const StudentListInClass = () => {
                           onClose={handleMenuClose}
                         >
                           <MenuItem
-                            sx={{ width: "100%" }}
                             component={Link}
                             to={`/student-detail/${user.id}/edit`}
                           >
                             <EditIcon style={{ marginRight: "8px" }} />
                             Edit Student
                           </MenuItem>
-
                           <MenuItem
-                            sx={{ width: "100%" }}
-                            component={Link}
-                            to="/score-management"
-                          >
-                            <ImportContactsIcon
-                              style={{ marginRight: "8px" }}
-                            />
-                            Score Management
-                          </MenuItem>
-                          <MenuItem
-                            sx={{ width: "100%" }}
                             onClick={() => openDeleteConfirmation(user.id)}
                           >
                             <DeleteForeverIcon style={{ marginRight: "8px" }} />

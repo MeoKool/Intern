@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap');
+
+.student-detail-common {
+
+    .label {
+        background-color: #8b8b8b;
+        color: #FFFFFF;
+        font-weight: 600;
+        width: 100%;
+        padding: 10px 15px;
+        font-family: Arial, sans-serif;
+    }
+
+    .info-field {
+        display: grid;
+        grid-template-columns: 0.4fr 0.6fr;
+        margin-bottom: 20px;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .info-field>* {
+        font-family: Arial, sans-serif;
+    }
+
+    .info-label {
+        font-weight: 600 !important;
+    }
+
+    .info-value {
+        overflow: hidden;
+        word-wrap: break-word;
+    }
+
+    .class-container {
+        font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        padding: 30px 2vw;
+        overflow-x: scroll;
+        color: #2d3748;
+    }
+
+    .class-card {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        padding: 20px 40px;
+        margin-right: 35px;
+        border-radius: 9px;
+    }
+
+    .class-card-status {
+        color: #FFF;
+        font-weight: 600;
+        padding: 6px 15px;
+        border-radius: 15px;
+        margin-left: 16px;
+    }
+
+    .reservation {
+        min-height: 200px;
+    }
+}

@@ -25,16 +25,21 @@ import {
   Alert,
 } from "@mui/material";
 
+import "../ReserveList/reservelist.css";
 import WarningIcon from "@mui/icons-material/Warning";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import PublishIcon from "@mui/icons-material/Publish";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import StopCircleOutlinedIcon from "@mui/icons-material/StopCircleOutlined";
 import PanToolOutlinedIcon from "@mui/icons-material/PanToolOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import ReservationAdd from "../ReservationAdd/ReservationAdd";
+import SendReserveMail from "./SendReserveMail/email-send/SendReserveMail";
+import { formatDate } from "../../utils/Date";
+import { DropOutStudent } from "../../api/APIConfigure";
+import { showErrorAlertModal, showSuccessModal } from "../../utils/Message";
 
 const Reserve = () => {
   const [users, setUsers] = useState([]);
@@ -45,8 +50,10 @@ const Reserve = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOption, setSelectedOption] = useState("fullName");
   const [selectedUser, setSelectedUser] = useState(null);
+  const [fetReveses, setFetReveses] = useState([]);
+  const [confirmRemindOpen, setConfirmRemindOpen] = useState(false);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
-
+  setConfirmationOpen;
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -56,40 +63,31 @@ const Reserve = () => {
     setPage(0);
   };
 
+  const [sendReserveMailUser, setSendReserveMailUser] = useState(null);
+
+  const handleSendReserveMailClose = () => {
+    setMoreHorizAnchorEl(null);
+    setSendReserveMailUser(null);
+  };
+
   const handleMenuClick = (event, user) => {
     setMoreHorizAnchorEl(event.currentTarget);
     setSelectedUser(user);
+    console.log(user, "usersdfssdfdf");
+    handlefetReveses(user.id);
   };
 
   const handleMenuClose = async (action) => {
     setMoreHorizAnchorEl(null);
 
-    if (selectedUser) {
-      if (action === "remove") {
-        setConfirmationOpen(true);
-      } else {
-        const updatedUsers = users.map((user) => {
-          if (user.id === selectedUser.id) {
-            if (action === "drop") {
-              user.status = "Drop out";
-            }
-            axios
-              .put(
-                `https://6535e093c620ba9358ecba91.mockapi.io/Resrver/${selectedUser.id}`,
-                user
-              )
-              .then((response) => {
-                console.log("Status updated successfully:", response.data);
-              })
-              .catch((error) => {
-                console.error("Error updating status:", error);
-              });
-          }
-          return user;
-        });
+    console.log(selectedUser);
 
-        setUsers(updatedUsers);
-      }
+    if (selectedUser) {
+      if (action == "remind") setConfirmRemindOpen(true);
+      if (action == "drop")
+        DropOutStudent(selectedUser.classCode, selectedUser.id)
+          .then(() => showSuccessModal("Drop out successfully"))
+          .catch(() => showErrorAlertModal());
     }
   };
 
@@ -113,15 +111,19 @@ const Reserve = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
-
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://6535e093c620ba9358ecba91.mockapi.io/Resrver"
+        "https://fams-net05-02.somee.com/api/reservation",
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
       );
-      setUsers(Array.isArray(response.data) ? response.data : []);
-    } catch (err) {
-      setUsers([]);
+      setUsers(response.data.items);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -149,6 +151,60 @@ const Reserve = () => {
     page * rowsPerPage,
     (page + 1) * rowsPerPage
   );
+  const handlefetReveses = (id) => {
+    axios
+      .get(`http://fams-net05-02.somee.com/api/reservation/${id}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        setFetReveses(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
+  console.log(fetReveses, "fetReveses");
+  const ReserveMenu = ({ user }) => {
+    return (
+      <>
+        <Menu
+          anchorEl={moreHorizAnchorEl}
+          open={Boolean(moreHorizAnchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem>
+            <PanToolOutlinedIcon style={{ marginRight: "8px" }} />
+            Re-class
+          </MenuItem>
+          <MenuItem
+            sx={{ width: "100%" }}
+            onClick={() => {
+              handleMenuClose("remind");
+            }}
+          >
+            <EmailOutlinedIcon style={{ marginRight: "8px" }} />
+            Remind
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuClose("drop")}>
+            <StopCircleOutlinedIcon style={{ marginRight: "8px" }} />
+            Drop class
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setSendReserveMailUser(user);
+              setMoreHorizAnchorEl(null);
+            }}
+          >
+            <EmailOutlinedIcon style={{ marginRight: "8px" }} />
+            Send reserve mail
+          </MenuItem>
+        </Menu>
+      </>
+    );
+  };
 
   return (
     <>
@@ -221,29 +277,12 @@ const Reserve = () => {
                       width: "150px",
                     }}
                   >
-                    <MenuItem sx={{ width: "100%" }} value={"studentId"}>
-                      Student code
-                    </MenuItem>
-                    <MenuItem sx={{ width: "100%" }} value={"fullName"}>
-                      Full Name
-                    </MenuItem>
-                    <MenuItem sx={{ width: "100%" }} value={"Email"}>
-                      Email
-                    </MenuItem>
+                    <MenuItem value={"studentId"}>Student code</MenuItem>
+                    <MenuItem value={"fullName"}>Full Name</MenuItem>
+                    <MenuItem value={"Email"}>Email</MenuItem>
                   </Select>
                 </Popover>
-                <Button
-                  variant="contained"
-                  style={{
-                    float: "right",
-                    backgroundColor: "#2d3748",
-                    padding: "10px",
-                    marginTop: "10px",
-                  }}
-                >
-                  <AddCircleOutlineIcon style={{ marginRight: "10px" }} />
-                  Add new
-                </Button>
+                <ReservationAdd />
                 <Button
                   variant="contained"
                   style={{
@@ -384,32 +423,34 @@ const Reserve = () => {
                         align="center"
                       ></TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.studentId}
+                        {user.fullName}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.studentId}
+                        {user.reservation.studentId}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
                         {user.gender}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {new Date(user.dob).toLocaleDateString()}
+                        {formatDate(new Date(user.dob))}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.studentId}
+                        {user.address}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.classId}
+                        {user.classCode}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.module}
+                        {user.reservation.reservedModule.moduleName}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {user.reason}
+                        {user.reservation.reason}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
-                        {new Date(user.startDate).toLocaleDateString()} -{" "}
-                        {new Date(user.endDate).toLocaleDateString()}
+                        {formatDate(new Date(user.reservation.startDate))} -{" "}
+                        {new Date(
+                          user.reservation.endDate
+                        ).toLocaleDateString()}
                       </TableCell>
                       <TableCell style={{ fontSize: "13px" }} align="center">
                         {user.status}
@@ -418,40 +459,7 @@ const Reserve = () => {
                         <MoreHorizIcon
                           onClick={(event) => handleMenuClick(event, user)}
                         />
-                        <Menu
-                          anchorEl={moreHorizAnchorEl}
-                          open={Boolean(moreHorizAnchorEl)}
-                          onClose={handleMenuClose}
-                        >
-                          <MenuItem sx={{ width: "100%" }}>
-                            <PanToolOutlinedIcon
-                              style={{ marginRight: "8px" }}
-                            />
-                            Re-class
-                          </MenuItem>
-                          <MenuItem sx={{ width: "100%" }}>
-                            <EmailOutlinedIcon style={{ marginRight: "8px" }} />
-                            Remind
-                          </MenuItem>
-                          <MenuItem
-                            sx={{ width: "100%" }}
-                            onClick={() => handleMenuClose("drop")}
-                          >
-                            <StopCircleOutlinedIcon
-                              style={{ marginRight: "8px" }}
-                            />
-                            Drop class
-                          </MenuItem>
-                          <MenuItem
-                            sx={{ width: "100%" }}
-                            onClick={() => handleMenuClose("remove")}
-                          >
-                            <CancelOutlinedIcon
-                              style={{ marginRight: "8px" }}
-                            />
-                            Remove reserve
-                          </MenuItem>
-                        </Menu>
+                        <ReserveMenu user={user} />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -478,7 +486,7 @@ const Reserve = () => {
       >
         <DialogTitle style={{ color: "blue" }}>
           <Alert icon={<WarningIcon />} severity="error">
-            Remove Reserving
+            Caution
           </Alert>
         </DialogTitle>
         <DialogContent>
@@ -486,8 +494,7 @@ const Reserve = () => {
             style={{ color: "black" }}
             id="alert-dialog-description"
           >
-            Do you really want to remove <br /> this student from the reserving
-            list?
+            Do you really want to do this action?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -504,8 +511,121 @@ const Reserve = () => {
             color="primary"
             autoFocus
           >
-            Delete
+            OK
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      <SendReserveMail
+        user={sendReserveMailUser}
+        handleClose={handleSendReserveMailClose}
+      />
+      <Dialog
+        open={confirmRemindOpen}
+        onClose={() => setConfirmRemindOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        PaperProps={{ style: { width: "90%", maxWidth: "900px" } }}
+      >
+        <Box
+          style={{ backgroundColor: "#2d3748" }}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <DialogTitle style={{ margin: "0 auto", color: "white" }}>
+            Email preview
+          </DialogTitle>
+          <Button
+            style={{ color: "white" }}
+            variant="text"
+            onClick={() => setConfirmRemindOpen(false)}
+          >
+            x
+          </Button>
+        </Box>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <div className="remind-form">
+              <div className="remid-form-items">
+                <strong>Teamplate Name</strong>{" "}
+              </div>
+              <div className="remind-form-items2">Nhắc nhở gửi điểm</div>
+            </div>
+            <div className="remind-form">
+              <div className="remid-form-items">
+                <strong>From</strong>{" "}
+              </div>
+              <div className="remind-form-items2">{fetReveses.email}</div>
+            </div>
+            <div className="remind-form">
+              <div className="remid-form-items">
+                <strong>To</strong>{" "}
+              </div>
+              <div className="remind-form-items2">
+                {" "}
+                {fetReveses.fullName} {fetReveses.email}{" "}
+              </div>
+            </div>
+            <div className="remind-form">
+              <div className="remid-form-items">
+                <strong>CC</strong>{" "}
+              </div>
+              <div className="remind-form-items2"> {fetReveses.email}</div>
+            </div>
+            <div className="remind-form">
+              <div className="remid-form-items">
+                <strong>Subject</strong>{" "}
+              </div>
+              <div className="remind-form-items2"> lorem isum</div>
+            </div>
+            <div className="remind-form">
+              <div className="remid-form-items">
+                <strong>Body</strong>{" "}
+              </div>
+              <div className="remind-form-items2">
+                Lorem lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Maiores eos sapiente temporibus ipsa tempora Culpa harum
+                voluptas ut?{" "}
+              </div>
+            </div>
+            <div className="remind-form">
+              <div className="remid-form-items"></div>
+              <div className="remind-form-items2">---------------------</div>
+            </div>
+            <div className="remind-form">
+              <div className="remid-form-items"></div>
+              <div className="remind-form-items2">Farm Admin</div>
+            </div>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions className="dialog-action">
+          <div style={{ paddingBottom: "1rem" }}>
+            <Button
+              style={{
+                color: "#2d3748",
+                border: "solid 1px #2d3748",
+                padding: "3px 25px",
+              }}
+              onClick={() => setConfirmRemindOpen(false)}
+              color="primary"
+            >
+              Back
+            </Button>
+            <Button
+              style={{
+                backgroundColor: "#2d3748",
+                color: "white",
+                padding: "3px 25px",
+              }}
+              onClick={() => setConfirmRemindOpen(false)}
+              color="primary"
+            >
+              Send
+            </Button>
+          </div>
         </DialogActions>
       </Dialog>
     </>

@@ -4,6 +4,9 @@ $color-orange: #D45B13;
 $color-green: #2F903F;
 $color-white: #FFFFFF;
 
+$color-black: #000000;
+$color-danger: #ff3131;
+
 .btn-primary {
     color: #FFFFFF !important;
     background-color: $color-primary !important;
@@ -34,4 +37,10 @@ $color-white: #FFFFFF;
 
 .h-100 {
     height: 100% !important;
+}
+
+.divider-y {
+    height: 100%;
+    width: 1px;
+    background-color: #000000;
 }

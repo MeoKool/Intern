@@ -7,6 +7,9 @@ export default function Footer() {
     width: "100%",
     bottom: "0",
     zIndex: "10",
+    position: "fixed",
+    left: "0",
+    right: "0",
   };
 
   return (

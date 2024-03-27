@@ -2,17 +2,19 @@ import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import StudentList from "./pages/studentList";
 import ClassList from "./pages/classList";
-import "./App.css";
+import "./App.scss";
 import MainPage from "./pages/MainPage/MainPage";
-import StudentDetails from "./components/student-details/StudentDetails";
+import ClassStudentDetail from "./components/Class/StudentDetail/ClassStudentDetail";
 import StudentDetailsCommon from "./components/student-details/StudentDetailsCommon";
 import StudentDetailEditCommon from "./components/student-details/student-detail-edit/StudentDetailEdit";
-import ScoreManagement from "./pages/ScorePage";
 import ReserverList from "./pages/ReseverList";
 import ErrorPage from "./pages/ErrorPage";
+import EmailPage from "./pages/EmailPage";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import ClassDetail from "./components/ClassDetail/ClassDetail";
+import { GlobalProvider } from "./context/GlobalContext";
+import LandingPage from "./pages/LandingPage";
 
 function RouteChangeTracker() {
   const location = useLocation();
@@ -29,16 +31,14 @@ function App() {
   );
 
   return (
-    <>
+    <GlobalProvider>
       <BrowserRouter>
         <RouteChangeTracker />
         <Routes>
-          {createRoute("/", <ErrorPage />)}
-          {createRoute("/home", <ErrorPage />)}
+          {createRoute("/", <LandingPage />)}
+          {createRoute("/home", <LandingPage />)}
           {createRoute("*", <ErrorPage />)}
-          {createRoute("/login-register", <LoginPage />)}
           {createRoute("/student-list", <StudentList />)}
-          {createRoute("/score-management", <ScoreManagement />)}
           {createRoute("/reserve-list", <ReserverList />)}
           {createRoute("/view-syllabus", <ErrorPage />)}
           {createRoute("/create-syllabus", <ErrorPage />)}
@@ -54,16 +54,17 @@ function App() {
           {createRoute("/calendar-setting", <ErrorPage />)}
           {createRoute("/view-program", <ErrorPage />)}
           {createRoute("/home", <ErrorPage />)}
+          {createRoute("/email-template", <EmailPage />)}
           {createRoute("/class/:id", <ClassDetail />)}
           {createRoute(
             "/class/:classId/student-detail/:id",
-            <StudentDetails />
+            <ClassStudentDetail />
           )}
           {createRoute("/student-detail/:id", <StudentDetailsCommon />)}
           {createRoute("/student-detail/:id/edit", <StudentDetailEditCommon />)}
         </Routes>
       </BrowserRouter>
-    </>
+    </GlobalProvider>
   );
 }
 

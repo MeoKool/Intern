@@ -23,11 +23,11 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 
-export default function Navbar({sx}) {
-  const location = useLocation()
+export default function Navbar({ sx }) {
+  const location = useLocation();
 
   const [toggle, setToggle] = useState(false);
-  const [navbarHeight, setNavbarHeight] = useState(0)
+  const [navbarHeight, setNavbarHeight] = useState(0);
 
   const MenuArr = [
     {
@@ -35,7 +35,7 @@ export default function Navbar({sx}) {
       name: "Home",
       icon: <HomeOutlinedIcon />,
       submenu: [],
-      supportedParams: ['home']
+      supportedParams: ["home"],
     },
     {
       id: "students",
@@ -51,7 +51,7 @@ export default function Navbar({sx}) {
           name: "Reserve list",
         },
       ],
-      supportedParams: ['student-list', 'reserve-list', 'student-detail']
+      supportedParams: ["student-list", "reserve-list", "student-detail"],
     },
     {
       id: "syllabus",
@@ -67,7 +67,7 @@ export default function Navbar({sx}) {
           name: "Create syllabus",
         },
       ],
-      supportedParams: ['view-syllabus', 'create-syllabus']
+      supportedParams: ["view-syllabus", "create-syllabus"],
     },
     {
       id: "training-program",
@@ -83,7 +83,7 @@ export default function Navbar({sx}) {
           name: "Create program",
         },
       ],
-      supportedParams: ['view-program', 'create-program']
+      supportedParams: ["view-program", "create-program"],
     },
     {
       id: "class",
@@ -99,14 +99,14 @@ export default function Navbar({sx}) {
           name: "Create class",
         },
       ],
-      supportedParams: ['view-class', 'create-class']
+      supportedParams: ["view-class", "create-class"],
     },
     {
       id: "training-calendar",
       name: "Training calendar",
       icon: <CalendarTodayOutlinedIcon />,
       submenu: [],
-      supportedParams: ['training-calendar']
+      supportedParams: ["training-calendar"],
     },
     {
       id: "user-management",
@@ -122,7 +122,7 @@ export default function Navbar({sx}) {
           name: "User permission",
         },
       ],
-      supportedParams: ['user-list', 'user-permission']
+      supportedParams: ["user-list", "user-permission"],
     },
     {
       id: "learning-materials",
@@ -139,14 +139,18 @@ export default function Navbar({sx}) {
           id: "calendar-setting",
           name: "Calendar",
         },
+        {
+          id: "email-template",
+          name: "Email-Template",
+        },
       ],
-      supportedParams: ['calendar-settings']
+      supportedParams: ["calendar-settings", "email-template"],
     },
   ];
 
   const getPath = () => {
-    const currentPath = location.pathname
-    const pathSegments = currentPath.split('/')
+    const currentPath = location.pathname;
+    const pathSegments = currentPath.split("/");
     return pathSegments[1];
   };
 
@@ -156,14 +160,14 @@ export default function Navbar({sx}) {
         return menu.id;
       }
     }
-  }
+  };
 
   const changeMenuHeight = () => {
-    let windowHeight = window.innerHeight
-    let halfWindowHeight = windowHeight - 135
+    let windowHeight = window.innerHeight;
+    let halfWindowHeight = windowHeight - 135;
 
-    setNavbarHeight(halfWindowHeight)
-  }
+    setNavbarHeight(halfWindowHeight);
+  };
 
   const [menuList, setMenuList] = useState(MenuArr);
 
@@ -184,21 +188,22 @@ export default function Navbar({sx}) {
       menu.expanded = false;
     });
 
-    changeMenuHeight()
+    changeMenuHeight();
 
     window.addEventListener("resize", (e) => {
-      changeMenuHeight()
+      changeMenuHeight();
     });
-
   }, []);
 
-  useEffect(() => { }, [menuList]);
+  useEffect(() => {}, [menuList]);
 
   const MenuButton = ({ menu }) => {
     return (
       <ListItemButton
         onClick={() => handleClickMenu(menu.id)}
-        className={`navbar--menu-btn ${getIdByPath(getPath()) == menu.id && 'navbar--menu-btn-selected'}`}
+        className={`navbar--menu-btn ${
+          getIdByPath(getPath()) == menu.id && "navbar--menu-btn-selected"
+        }`}
       >
         <ListItemIcon
           className="navbar--menu-icon"
@@ -239,9 +244,12 @@ export default function Navbar({sx}) {
             </ListItemIcon>
           </ListItemButton>
         </Box>
-        <Box className='navbar--menu-items' sx={{maxHeight: `${navbarHeight}px`}}>
+        <Box
+          className="navbar--menu-items"
+          sx={{ maxHeight: `${navbarHeight}px` }}
+        >
           {menuList.map((menu) => (
-            <>
+            <Box key={menu.id}>
               {menu.submenu == null || menu.submenu.length == 0 ? (
                 <Link
                   to={`/${menu.id}`}
@@ -254,7 +262,15 @@ export default function Navbar({sx}) {
               )}
 
               {toggle && (
-                <Collapse in={menu.expanded} timeout="auto" unmountOnExit className={`${getIdByPath(getPath()) == menu.id && 'navbar--menu-btn-selected'}`}>
+                <Collapse
+                  in={menu.expanded}
+                  timeout="auto"
+                  unmountOnExit
+                  className={`${
+                    getIdByPath(getPath()) == menu.id &&
+                    "navbar--menu-btn-selected"
+                  }`}
+                >
                   <List component="div" disablePadding>
                     {menu.submenu != null &&
                       menu.submenu.length > 0 &&
@@ -271,10 +287,9 @@ export default function Navbar({sx}) {
                   </List>
                 </Collapse>
               )}
-            </>
+            </Box>
           ))}
         </Box>
-
       </List>
     </Box>
   );

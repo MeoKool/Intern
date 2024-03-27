@@ -11,15 +11,13 @@ import {
   Radio,
 } from "@mui/material";
 import "./ImportButton.css";
-import { useParams } from "react-router-dom";
 import { FileUpload } from "@mui/icons-material";
+import { showErrorAlertModal, showSuccessModal } from "../../utils/Message";
 
-export default function ImportButton() {
-  const id = useParams() || 1;
+export default function ImportButton({ file, postFile, idObj }) {
   const [open, setOpen] = React.useState(false);
-  const [duplicateHandle, setDuplicateHandle] = React.useState("Allow");
+  const [duplicateHandle, setDuplicateHandle] = React.useState("Replace");
   const [selectedFile, setSelectedFile] = React.useState(null);
-  const [error, setError] = React.useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -27,7 +25,6 @@ export default function ImportButton() {
 
   const handleClose = () => {
     setOpen(false);
-    setError(null);
   };
 
   const handleDuplicateHandleChange = (event) => {
@@ -35,38 +32,29 @@ export default function ImportButton() {
   };
 
   const handleFileChange = (event) => {
-    // Assuming you only want to handle a single file selection
     const file = event.target.files[0];
     setSelectedFile(file);
   };
 
   const handleImport = () => {
     if (!selectedFile) {
-      setError("Please select a file");
+      showErrorAlertModal("Please select a file");
       return;
     }
 
     const formData = new FormData();
-    formData.append("file", selectedFile);
-    formData.append("duplicateHandle", duplicateHandle);
+    formData.append("excelFile", selectedFile);
 
-    fetch(`http://localhost:8080/api/classes/${id}/add-students-by-excel`, {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to import students");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Import successful", data);
+    postFile(idObj, formData, duplicateHandle)
+      .then(() => {
+        showSuccessModal(
+          "Import students successfully, the page will refresh automatically after 2 seconds"
+        );
         handleClose();
+        setTimeout(() => window.location.reload(), 2222);
       })
       .catch((error) => {
-        console.error("Import failed", error);
-        setError("Failed to import students");
+        showErrorAlertModal(error.response);
       });
   };
 
@@ -134,7 +122,7 @@ export default function ImportButton() {
               <div className="setting-content">
                 <p className="title">Import template</p>
                 <div className="option">
-                  <a href="student-template.xlsx">Download</a>
+                  <a href={file}>Download</a>
                 </div>
               </div>
             </div>
@@ -162,11 +150,6 @@ export default function ImportButton() {
                     onChange={handleDuplicateHandleChange}
                   >
                     <FormControlLabel
-                      value="Allow"
-                      control={<Radio />}
-                      label="Allow"
-                    />
-                    <FormControlLabel
                       value="Replace"
                       control={<Radio />}
                       label="Replace"
@@ -184,7 +167,6 @@ export default function ImportButton() {
         </DialogContent>
 
         <DialogActions>
-          {error && <p style={{ color: "red" }}>{error}</p>}
           <Button
             style={{ color: "#E74A3B", textDecoration: "underline" }}
             onClick={handleClose}
